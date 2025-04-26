@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const erpCollectionRoutes = require("./routes/erp_collection_routes");
 const cors = require("cors"); // Import the cors package
-
+let interval;
 dotenv.config();
 
 const app = express();
@@ -15,14 +15,46 @@ mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("Connected to MongoDB");
+    if (interval) clearInterval(interval);
+    err_db = null;
   })
   .catch((err) => {
     console.error("MongoDB connection error:", err);
     err_db = err;
+    if (err_db) {
+      if (interval) {
+        clearInterval(interval);
+      } else {
+        interval = setInterval(() => {
+          mongoose
+            .connect(process.env.MONGO_URI)
+            .then(() => {
+              console.log("Connected to MongoDB");
+              if (interval) clearInterval(interval);
+              err_db = null;
+            })
+            .catch((err) => {
+              console.error("MongoDB connection error:", err);
+              err_db = err;
+            });
+        }, 10000);
+      }
+    }
   });
 
 app.get("/", (req, res) => {
   if (err_db) {
+    setInterval(() => {
+      mongoose
+        .connect(process.env.MONGO_URI)
+        .then(() => {
+          console.log("Connected to MongoDB");
+        })
+        .catch((err) => {
+          console.error("MongoDB connection error:", err);
+          err_db = err;
+        });
+    }, 1000);
     return res
       .status(500)
       .json({ message: "Database connection error", error: err_db });

@@ -24,7 +24,7 @@ const responseApi = async (data) => {
   }
 };
 const categories = async () => {
-  const response = await fetch("/site.json");
+  const response = await fetch("https://easihub.com/site.json");
 
   // Check if the response is successful
   if (!response.ok) {
@@ -36,13 +36,24 @@ const categories = async () => {
   console.log("Response from server:", result);
   return result;
 };
+const getDefaultUrl = (thumbnail_url, default_thumbnail_url) => {
+  if (
+    thumbnail_url.includes(".png") ||
+    thumbnail_url.includes(".jpg") ||
+    thumbnail_url.includes(".jpeg")
+  ) {
+    return thumbnail_url;
+  } else {
+    return default_thumbnail_url;
+  }
+};
 const templateEvent = ({
-  event_name,
-  event_start_date,
-  event_end_date,
-  event_description,
-  event_page_url,
-  event_thumbnail_url,
+  event_name = "New Event",
+  event_start_date = "2023-10-01",
+  event_end_date = "2023-10-02",
+  event_description = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos quod laborum ullam illum ducimus obcaecati eligendi officia excepturi aliquid officiis. Nam aperiam totam impedit ipsam unde tempora eum praesentium laborum!",
+  event_page_url = "https://easihub.com/tags/c/plm-product-lifecycle-management/generic-plm-topics/1581/articles",
+  event_thumbnail_url = "https://media.istockphoto.com/id/2155769551/photo/digital-data-tunnel-information-flow.webp?a=1&b=1&s=612x612&w=0&k=20&c=8bWxC25FEzCfubmAtzmswN6bRMj8ETTqULWwLao6B3c=",
 }) => `
 <tr data-category-id="69" data-notification-level="regular" class="has-description
             
@@ -73,7 +84,10 @@ const templateEvent = ({
 
           <div class="category-logo aspect-image">
             <img
-              src="${event_thumbnail_url}"
+              src="${getDefaultUrl(
+                event_thumbnail_url,
+                "https://media.istockphoto.com/id/2155769551/photo/digital-data-tunnel-information-flow.webp?a=1&b=1&s=612x612&w=0&k=20&c=8bWxC25FEzCfubmAtzmswN6bRMj8ETTqULWwLao6B3c="
+              )}"
               width="256"
               height="256"
               style="--aspect-ratio: 1"
@@ -102,12 +116,12 @@ const templateEvent = ({
     </tr>
   `;
 const templateBulletin = ({
-  version_name,
-  release_date,
-  release_notes,
-  description,
-  url,
-  thumbnail_url,
+  version_name = "New Version",
+  release_date = "2023-10-01",
+  release_notes = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos quod laborum ullam illum ducimus obcaecati eligendi officia excepturi aliquid officiis. Nam aperiam totam impedit ipsam unde tempora eum praesentium laborum!",
+  description = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos quod laborum ullam illum ducimus obcaecati eligendi officia excepturi aliquid officiis. Nam aperiam totam impedit ipsam unde tempora eum praesentium laborum!",
+  url = "https://easihub.com/tags/c/plm-product-lifecycle-management/generic-plm-topics/1581/articles",
+  thumbnail_url = "https://images.unsplash.com/photo-1624555130581-1d9cca783bc0?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXJsfGVufDB8fDB8fHww",
 }) => `
 <tr data-category-id="69" data-notification-level="regular" class="has-description
             
@@ -138,7 +152,10 @@ const templateBulletin = ({
 
           <div class="category-logo aspect-image">
             <img
-              src="${thumbnail_url}"
+             src="${getDefaultUrl(
+               thumbnail_url,
+               "https://images.unsplash.com/photo-1624555130581-1d9cca783bc0?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXJsfGVufDB8fDB8fHww"
+             )}"                
               width="256"
               height="256"
               style="--aspect-ratio: 1"
@@ -155,15 +172,20 @@ const templateBulletin = ({
           >${description} - ${release_date}</span
         >
       </div>      
+      <div class="category-description">
+        <span
+          >${release_notes}</span
+        >
+      </div>      
     </td></tr>
   `;
 const templateArticle = ({
-  article_title,
-  article_description,
-  article_author,
-  article_date,
-  article_url,
-  article_thumbnail_url,
+  article_title = "The new Article",
+  article_description = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos quod laborum ullam illum ducimus obcaecati eligendi officia excepturi aliquid officiis. Nam aperiam totam impedit ipsam unde tempora eum praesentium laborum!",
+  article_author = "John Doe",
+  article_date = "2023-10-01",
+  article_url = "https://easihub.com/tags/c/plm-product-lifecycle-management/generic-plm-topics/1581/articles",
+  article_thumbnail_url = "https://media.istockphoto.com/id/2174551157/photo/cyber-security-data-protection-business-technology-privacy-concept.webp?a=1&b=1&s=612x612&w=0&k=20&c=wUI3KXIgMqgob_LcEkVhnTl20f0VK-fiJLqBLywYBIU=",
 }) => `
 <tr data-category-id="69" data-notification-level="regular" class="has-description
             
@@ -194,7 +216,10 @@ const templateArticle = ({
 
           <div class="category-logo aspect-image">
             <img
-              src="${article_thumbnail_url}"
+            src="${getDefaultUrl(
+              article_thumbnail_url,
+              "https://media.istockphoto.com/id/2174551157/photo/cyber-security-data-protection-business-technology-privacy-concept.webp?a=1&b=1&s=612x612&w=0&k=20&c=wUI3KXIgMqgob_LcEkVhnTl20f0VK-fiJLqBLywYBIU="
+            )}"              
               width="256"
               height="256"
               style="--aspect-ratio: 1"
@@ -238,10 +263,10 @@ const resultHtml = (tds) => `
 </div></div></div>
 `;
 const getSubCategory = () => {
-  const pathArr = window.location.pathname.split(
-    //`https://easihub.com/tags/c/plm-product-lifecycle-management/generic-plm-topics/1581/articles`.split(
-    "/"
-  );
+  const pathArr = //window.location.pathname.split(
+    `https://easihub.com/tags/c/plm-product-lifecycle-management/generic-plm-topics/1581/articles`.split(
+      "/"
+    );
   //window.location.path
   return {
     subcategoryid: +pathArr[pathArr.length - 2],
@@ -284,7 +309,7 @@ const getCategoryName = async ({
       results.software_name = results.domain_name;
     }
 
-    const filtered = await responseApi(results);
+    let filtered = await responseApi(results);
     console.log("filtered", filtered);
 
     let resultTds = ``;
@@ -316,6 +341,53 @@ const getCategoryName = async ({
           }
         }
       }, 1000);
+    } else {
+      filtered = [
+        {
+          event_name: "The new Event",
+          event_start_date: "2023-10-01",
+          event_end_date: "2023-10-02",
+          event_description:
+            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos quod laborum ullam illum ducimus obcaecati eligendi officia excepturi aliquid officiis. Nam aperiam totam impedit ipsam unde tempora eum praesentium laborum!",
+          event_page_url:
+            "https://easihub.com/tags/c/plm-product-lifecycle-management/generic-plm-topics/1581/articles",
+          event_thumbnail_url:
+            "https://media.istockphoto.com/id/2152960546/photo/young-woman-using-digital-tablet-at-home.webp?a=1&b=1&s=612x612&w=0&k=20&c=ERw6vEbS6Hy_i0QFlu5HXjEFd1v98QdyKCg3lOcA-M4=",
+        },
+        {
+          version_name: "The new Version",
+          release_date: "2023-10-01",
+          release_notes:
+            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos quod laborum ullam illum ducimus obcaecati eligendi officia excepturi aliquid officiis. Nam aperiam totam impedit ipsam unde tempora eum praesentium laborum!",
+          description:
+            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos quod laborum ullam illum ducimus obcaecati eligendi officia excepturi aliquid officiis. Nam aperiam totam impedit ipsam unde tempora eum praesentium laborum!",
+          url: "https://easihub.com/tags/c/plm-product-lifecycle-management/generic-plm-topics/1581/articles",
+          thumbnail_url:
+            "https://media.istockphoto.com/id/2151954310/photo/shield-security-network-technology-wire-frame-concept.webp?a=1&b=1&s=612x612&w=0&k=20&c=dXCjIveEjelzAWqLkt3Hu6LXYhBSyH5vJAcCXhr06k8=",
+        },
+        {
+          article_title: "The new Article",
+          article_description:
+            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Dignissimos quod laborum ullam illum ducimus obcaecati eligendi officia excepturi aliquid officiis. Nam aperiam totam impedit ipsam unde tempora eum praesentium laborum!",
+          article_author: "John Doe",
+          article_date: "2023-10-01",
+          article_url:
+            "https://easihub.com/tags/c/plm-product-lifecycle-management/generic-plm-topics/1581/articles",
+          article_thumbnail_url:
+            "https://media.istockphoto.com/id/2174551157/photo/cyber-security-data-protection-business-technology-privacy-concept.webp?a=1&b=1&s=612x612&w=0&k=20&c=wUI3KXIgMqgob_LcEkVhnTl20f0VK-fiJLqBLywYBIU=",
+        },
+      ];
+      filtered.forEach((x) => {
+        if (x.event_name) {
+          resultTds += templateEvent(x);
+        }
+        if (x.version_name) {
+          resultTds += templateBulletin(x);
+        }
+        if (x.article_title) {
+          resultTds += templateArticle(x);
+        }
+      });
     }
 
     console.log("");
