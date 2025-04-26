@@ -39,22 +39,14 @@ mongoose
             });
         }, 10000);
       }
+    } else {
+      if (interval) clearInterval(interval);
     }
   });
 
 app.get("/", (req, res) => {
   if (err_db) {
-    setInterval(() => {
-      mongoose
-        .connect(process.env.MONGO_URI)
-        .then(() => {
-          console.log("Connected to MongoDB");
-        })
-        .catch((err) => {
-          console.error("MongoDB connection error:", err);
-          err_db = err;
-        });
-    }, 1000);
+    console.error("MongoDB connection error:", err_db);
     return res
       .status(500)
       .json({ message: "Database connection error", error: err_db });
