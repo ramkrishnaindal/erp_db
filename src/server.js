@@ -9,7 +9,7 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cors()); // Enable CORS for all routes
-
+let err_db;
 // MongoDB connection
 mongoose
   .connect(process.env.MONGO_URI)
@@ -18,9 +18,15 @@ mongoose
   })
   .catch((err) => {
     console.error("MongoDB connection error:", err);
+    err_db = err;
   });
 
 app.get("/", (req, res) => {
+  if (err_db) {
+    return res
+      .status(500)
+      .json({ message: "Database connection error", error: err_db });
+  }
   res.send("Welcome to the ERP Collection API");
 });
 // Routes
