@@ -18,9 +18,15 @@ router.post("/", async (req, res) => {
     if (domain && domain.length) {
       results = domain.filter(
         (x) =>
-          x.version_name?.trim().toLowerCase() ===
+          x.software_name.trim().toLowerCase() ===
           software_name.trim().toLowerCase()
       );
+      if (!results.length)
+        results = domain.filter(
+          (x) =>
+            x.version_name?.trim().toLowerCase() ===
+            software_name.trim().toLowerCase()
+        );
       if (!results.length)
         results = domain.filter(
           (x) =>
@@ -31,12 +37,6 @@ router.post("/", async (req, res) => {
         results = domain.filter(
           (x) =>
             x.article_title?.trim().toLowerCase() ===
-            software_name.trim().toLowerCase()
-        );
-      if (!results.length)
-        results = domain.filter(
-          (x) =>
-            x.software_name.trim().toLowerCase() ===
             software_name.trim().toLowerCase()
         );
     }
