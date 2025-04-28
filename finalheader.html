@@ -131,17 +131,17 @@ const templateEvent = ({
           >${event_description}</span
         >
       </div>
-      <div class="category-date">
-        <strong>
+      <div class="category-date badge-category__name">
+        
         <span>
           Start Date:${event_start_date}</span>
-        </strong>
+        
 
         </div>
-      <div class="category-date">
-        <strong>
+        <div class="category-date badge-category__name">
+        
         <span>End Date:${event_end_date}</span>
-        </strong>
+        
 
       </div>
       <div style="display: flex; justify-content: flex-end;margin-right:1em;margin-bottom:1em;">        
@@ -290,8 +290,9 @@ const templateArticle = ({
         >
        
       </div>   
-       <div class="category-description"> <em>Author: ${article_author}</em></div>   
-       <div style="display: flex; justify-content: flex-end;margin-right:1em;margin-bottom:1em;">        
+       
+       <div style="display: flex; justify-content: space-between;margin-right:1em;">        
+        <div class="category-description" style="margin-bottom:0"> <em>Author: ${article_author}</em></div>   
         <button id="social"><i class="fas fa-share-alt"></i></button>
         </div>
     </td></tr>
