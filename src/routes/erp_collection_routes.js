@@ -10,7 +10,7 @@ router.post("/", async (req, res) => {
       domain_name,
       topic_type,
       page_num = 1,
-      page_size = 10,
+      page_size = 9,
     } = req.body;
     let results = [];
     results = await ErpCollection.find({
