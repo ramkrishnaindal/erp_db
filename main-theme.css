@@ -2634,7 +2634,17 @@ body.landing-page .btn.btn-icon {
   gap: 15px;
   margin-top: 10px;
 }
-
+#showMoreDiv {
+  display: flex;
+  justify-content: flex-end;
+  margin: 1em;
+}
+#showMore {
+  background-color: white;
+  border-radius: 5px;
+  border: 1px solid black;
+  padding: 5px 10px;
+}
 .footer .social-media-icon a {
   width: 30px;
   height: 30px;
