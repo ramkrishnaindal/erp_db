@@ -75,5 +75,63 @@ router.post("/", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+router.post("/count", async (req, res) => {
+  try {
+    const { software_name, domain_name, topic_type } = req.body;
+    let results = 0;
+    results = await ErpCollection.countDocuments({
+      domain_name: {
+        $regex: new RegExp("^" + domain_name.toLowerCase().trim(), "i"),
+      },
+      topic_type: {
+        $regex: new RegExp("^" + topic_type.toLowerCase().trim(), "i"),
+      },
+      software_name: {
+        $regex: new RegExp("^" + software_name.toLowerCase().trim(), "i"),
+      },
+    });
+    if (!results)
+      results = await ErpCollection.countDocuments({
+        domain_name: {
+          $regex: new RegExp("^" + domain_name.toLowerCase().trim(), "i"),
+        },
+        topic_type: {
+          $regex: new RegExp("^" + topic_type.toLowerCase().trim(), "i"),
+        },
+        version_name: {
+          $regex: new RegExp("^" + software_name.toLowerCase().trim(), "i"),
+        },
+      });
+
+    if (!results)
+      results = await ErpCollection.countDocuments({
+        domain_name: {
+          $regex: new RegExp("^" + domain_name.toLowerCase().trim(), "i"),
+        },
+        topic_type: {
+          $regex: new RegExp("^" + topic_type.toLowerCase().trim(), "i"),
+        },
+        event_name: {
+          $regex: new RegExp("^" + software_name.toLowerCase().trim(), "i"),
+        },
+      });
+
+    if (!results)
+      results = await ErpCollection.countDocuments({
+        domain_name: {
+          $regex: new RegExp("^" + domain_name.toLowerCase().trim(), "i"),
+        },
+        topic_type: {
+          $regex: new RegExp("^" + topic_type.toLowerCase().trim(), "i"),
+        },
+        article_title: {
+          $regex: new RegExp("^" + software_name.toLowerCase().trim(), "i"),
+        },
+      });
+    res.status(200).json(results);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 module.exports = router;
