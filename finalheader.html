@@ -1,6 +1,7 @@
 <meta name="robots" content="noindex, nofollow">
 <script src="https://files.extrastatic.dev/community/on-discourse.js"></script>
 <script src="https://files.extrastatic.dev/community/index.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js" integrity="sha512-hUhvpC5f8cgc04OZb55j0KNGh4eh7dLxd/dPSJ5VyzqDWxsayYbojWyl5Tkcgrmb/RVKCRJI1jNlRbVP4WWC4w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link rel="stylesheet" type="text/css" href="https://files.extrastatic.dev/community/index.css" ></link>
 <script>
@@ -21,7 +22,14 @@ function showContent(id) {
 function toggleFAQ(item) {
   item.classList.toggle("expanded");
 }
-
+function getMomentDate(date) {
+  const converted= moment(date).format("LL");
+  if (converted === "Invalid date") {
+    return date;
+  } else {
+    return converted;
+  }
+}
 function toggleHelp(item) {
   item.classList.toggle("expanded");
 }
@@ -229,12 +237,12 @@ function toggleHelp(item) {
               
               <div  style="display:flex; font-weight:100;flex-shrink:0;">
                 <span style="color:rgb(73, 73, 252);"
-                  >Start: ${start_date}</span>
+                  >Start: ${getMomentDate(start_date)}</span>
                     
               </div>
               <div  style="display:flex; font-weight:100;flex-shrink:0;">
                 <span style="color:rgb(73, 73, 252);"
-                  >End: ${end_date}</span>
+                  >End: ${getMomentDate(end_date)}</span>
                     
               </div>
             </div>
@@ -317,7 +325,7 @@ function toggleHelp(item) {
                 </div>
                 <div class="category-text-title" style="margin:0 0 0.5em 0;display:flex; font-size:0.8em; order:2;">
                   <span style="color:rgb(0,220,220);"
-                    >${topic_date}</span>
+                    >${getMomentDate(topic_date)}</span>
                       
                 </div>
                 </a
@@ -471,7 +479,7 @@ function toggleHelp(item) {
                   </div>
                   <div class="category-text-title" style="margin:0 0 0.5em 0;display:flex; font-size:0.8em; order:2;">
                     <span style="color:rgb(0,220,220);"
-                      >${topic_date}</span>
+                      >${getMomentDate(topic_date)}</span>
                         
                   </div>
                   </a
@@ -485,7 +493,7 @@ function toggleHelp(item) {
               </div>
               <div  style="display:flex; font-weight:100;flex-shrink:0;">
                 <span style="color:rgb(73, 73, 252);"
-                  >Release Date: ${release_date}</span>
+                  >Release Date: ${getMomentDate(release_date)}</span>
                     
               </div>
               </div>
