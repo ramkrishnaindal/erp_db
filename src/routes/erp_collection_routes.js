@@ -1,7 +1,14 @@
 const express = require("express");
 const router = express.Router();
 const ErpCollection = require("../models/erp_collection");
-
+const isUrlValid = async (urlThumbnail) => {
+  const response = await fetch(urlThumbnail);
+  // Check if the response is successful
+  if (!response.ok) {
+    return false;
+  }
+  return true;
+};
 // Get all documents
 router.post("/", async (req, res) => {
   try {
@@ -69,8 +76,34 @@ router.post("/", async (req, res) => {
       })
         .skip((page_num - 1) * page_size)
         .limit(page_size);
-
-    res.status(200).json(results);
+    results = results.map(async (result) => {
+      // debugger;
+      const isValid =
+        !!result.thumbnail_url && (await isUrlValid(result.thumbnail_url));
+      if (!isValid) {
+        switch (result.topic_type) {
+          case "bulletins":
+            result.thumbnail_url =
+              "https://easihub.com/uploads/default/original/1X/2ccdcf178cdc68df1432405245d6c0ebd48f136b.jpg";
+            break;
+          case "articles":
+            result.thumbnail_url =
+              "https://easihub.com/uploads/default/original/1X/0cfbded9a9b66d49a1245a2bd7023c8fd8217f5b.jpg";
+            break;
+          case "events":
+            result.thumbnail_url =
+              "https://easihub.com/uploads/default/original/1X/39d542ca6a6ba52650c772b7d120f9bd2e506231.jpg";
+            break;
+          case "Podcast":
+            result.thumbnail_url =
+              "https://www.freeiconspng.com/uploads/no-image-icon-11.PNG";
+            break;
+        }
+      }
+      return { ...result };
+    });
+    results = await Promise.all(results);
+    res.status(200).json(results.map((result) => result._doc));
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

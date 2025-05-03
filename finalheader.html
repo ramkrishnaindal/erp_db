@@ -26,7 +26,7 @@ function toggleHelp(item) {
   item.classList.toggle("expanded");
 }
 </script>
-<script type="text/discourse-plugin" version="0.8">
+<script type="text/discourse-plugin" version="0.8">//
   const categories = async () => {
     const response = await fetch("/site.json");
     // Check if the response is successful
@@ -39,13 +39,15 @@ function toggleHelp(item) {
     console.log("Response from server:", result);
     return result;
   };
+  
   let categoriesList = [];
   let showMore = false;
   let totalRecords = 0;
-  let page_size = 9;
-  let page_num = 1;
+  
   let resultTds;
   api.onPageChange(async () => {
+    let page_size = 9;
+    let page_num = 1;
     if (categoriesList.length === 0) {
       // Fetch categories only once
       categoriesList = (await categories()).categories;
@@ -100,6 +102,23 @@ function toggleHelp(item) {
         console.error("Error making POST request:", error);
       }
     };
+    function getEventLabelColor(eventType) {
+      switch (eventType.toLowerCase()) {
+        case 'conference': return '#007bff';
+        case 'webinar': return '#28a745';
+        case 'seminar': return '#17a2b8';
+        case 'workshop': return '#ffc107';
+        case 'summit': return '#6610f2';
+        case 'meetup': return '#fd7e14';
+        case 'roundtable': return '#6f42c1';
+        case 'launch event': return '#e83e8c';
+        case 'lecture series': return '#20c997';
+        case 'bootcamp': return '#343a40';
+        case 'technical training': return '#17a2b8';
+        case 'panel discussion': return '#dc3545';
+        default: return '#007bff'; // default blue
+      }
+    }
     const getThumbNail = (original, defaultUrl) => {
       if (
         original?.includes(".png") ||
@@ -111,182 +130,143 @@ function toggleHelp(item) {
         return defaultUrl;
       }
     };
-    const templateEvent = ({
-      event_name = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo iure autem reiciendis tenetur. Eaque placeat adipisci officiis facere commodi non corporis veniam repellat nesciunt, quasi neque dolore labore voluptatibus laborum.",
-      event_start_date = "2023-10-01",
-      event_end_date = "2023-10-01",
-      event_description = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo iure autem reiciendis tenetur. Eaque placeat adipisci officiis facere commodi non corporis veniam repellat nesciunt, quasi neque dolore labore voluptatibus laborum.",
-      event_page_url = "https://easihub.com/tags/c/plm-product-lifecycle-management/generic-plm-topics/1581/articles",
-      event_thumbnail_url = "https://media.istockphoto.com/id/2155769551/photo/digital-data-tunnel-information-flow.webp?a=1&b=1&s=612x612&w=0&k=20&c=8bWxC25FEzCfubmAtzmswN6bRMj8ETTqULWwLao6B3c=",
-    }) => `
-  <tr data-category-id="69" data-notification-level="regular" class="has-description            
-            has-logo">
-  <td class="category" style="--category-badge-color: #231f20">
-      <h3 id="ember1277" class="ember-view">
-        <a target="_blank" class="category-title-link" href="${event_page_url}">
-          <div class="category-text-title">
-            <span class="category-name"
-              ><span
-                ><span
-                  class="badge-category__wrapper"
-                  style="
-                    --category-badge-color: #231f20;
-                    --category-badge-text-color: #ffffff;
-                  "
-                  ><span
-                    data-category-id="31"
-                    data-drop-close="true"
-                    class="badge-category --style-square"
-                    title="${event_description}"
-                    ><span class="badge-category__name">${event_name}</span></span
-                  ></span
-                ></span
-              ></span
-            >
-          </div>
-  
-          <div class="category-logo aspect-image">
-            <img
-              src="${getThumbNail(
-                event_thumbnail_url,
-                "https://media.istockphoto.com/id/2155769551/photo/digital-data-tunnel-information-flow.webp?a=1&b=1&s=612x612&w=0&k=20&c=8bWxC25FEzCfubmAtzmswN6bRMj8ETTqULWwLao6B3c="
-              )}"
-              width="256"
-              height="256"
+    const templateEvent =({
+      title ,
+      software_name,
+      domain_name,
+      source_name,
+      description ,
+      author_name ,
+      start_date ,
+      end_date ,
+      event_type ,
+      url ,
+      thumbnail_url ,
+    }) => {
+      
+      return `
+          <tr data-category-id="69" data-notification-level="regular" class="has-description          
+                    has-logo">
+          <td class="category" style="--category-badge-color: #231f20">
+            <div>
+              <h3 id="ember1277" class="ember-view">
+                <a target="_blank" class="category-title-link" href="${url}">
+                  
+                  
+                  
+                  <div class="category-logo aspect-image">
+                    <div class="event-label" style="background:${getEventLabelColor(event_type)};">${event_type}</div>
+                    <img
+                    src="${getThumbNail(
+                      thumbnail_url,
+                      "https://plus.unsplash.com/premium_photo-1683865776032-07bf70b0add1?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dXJsfGVufDB8fDB8fHww"
+                    )}"
+                      src="${thumbnail_url}"
+                      width="256"
+                      height="256"
+                      
+                      alt=""
+                    />
+                  </div>
+                  <div class="category-text-title" style="margin:1em 0 0.5em 0;color:rgba(0,0,0,.6);display:flex; font-size:0.8em;">
+                    <span 
+                      >${domain_name}|${software_name}</span>
+                        
+                  </div>
+                  <div style="order:3;font-size:1.2em;">
+                    <span class="category-name"
+                      ><span
+                        ><span
+                          class="badge-category__wrapper"
+                          style="
+                            --category-badge-color: #231f20;
+                            --category-badge-text-color: #ffffff;
+                          "
+                          ><span
+                            data-category-id="31"
+                            data-drop-close="true"
+                            class="badge-category --style-square"
+                            title="${description}"
+                            ><span class="badge-category__name">${title}</span></span
+                          ></span
+                        ></span
+                      ></span
+                    >
+                  </div>
+                  
+                  </a
+                >
+              </h3>
               
-              alt=""
-            />
-          </div>
-  
-          </a
-        >
-      </h3>
-  
-      <div class="category-description">
-        <span
-          >${event_description}</span
-        >
-      </div>
-      <div class="category-date badge-category__name">
-        
-        <span>
-          Start Date:${event_start_date}</span>
-        
-  
-        </div>
-        <div class="category-date badge-category__name">
-        
-        <span>End Date:${event_end_date}</span>
-        
-  
-      </div>
-      <div style="display: flex; justify-content: flex-end;margin-right:1em;margin-bottom:1em;">        
-      <button id="social"><i class="fas fa-share-alt"></i></button>
-      </div>
-    </td>
-    </tr>
-  `;
-    const templateBulletin = ({
-      version_name = "version 1",
-      release_date = "2023-10-01",
-      release_notes = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo iure autem reiciendis tenetur. Eaque placeat adipisci officiis facere commodi non corporis veniam repellat nesciunt, quasi neque dolore labore voluptatibus laborum.",
-      description = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo iure autem reiciendis tenetur. Eaque placeat adipisci officiis facere commodi non corporis veniam repellat nesciunt, quasi neque dolore labore voluptatibus laborum.",
-      url = "https://easihub.com/tags/c/plm-product-lifecycle-management/generic-plm-topics/1581/articles",
-      thumbnail_url = "https://plus.unsplash.com/premium_photo-1683865776032-07bf70b0add1?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dXJsfGVufDB8fDB8fHww",
-    }) => `
-  <tr data-category-id="69" data-notification-level="regular" class="has-description
-            
-            has-logo">
-  <td class="category" style="--category-badge-color: #231f20">
-      <h3 id="ember1277" class="ember-view">
-        <a target="_blank" class="category-title-link" href="${url}">
-          <div class="category-text-title">
-            <span class="category-name"
-              ><span
-                ><span
-                  class="badge-category__wrapper"
-                  style="
-                    --category-badge-color: #231f20;
-                    --category-badge-text-color: #ffffff;
-                  "
-                  ><span
-                    data-category-id="31"
-                    data-drop-close="true"
-                    class="badge-category --style-square"
-                    title="${description}"
-                    ><span class="badge-category__name">${version_name}</span></span
-                  ></span
-                ></span
-              ></span
-            >
-          </div>
-          <div class="category-text-title">
-            <span class="category-name"
-              ><span
-                ><span
-                  class="badge-category__wrapper"
-                  style="
-                    --category-badge-color: #231f20;
-                    --category-badge-text-color: #ffffff;
-                  "
-                  ><span
-                    data-category-id="31"
-                    data-drop-close="true"
-                    class="badge-category --style-square"
-                    title="${release_notes}"
-                    ></span
-                  ></span
-                ></span
-              ></span
-            >
-          </div>
-  
-          <div class="category-logo aspect-image">
-            <img
-             src="${getThumbNail(
-               thumbnail_url,
-               "https://plus.unsplash.com/premium_photo-1683865776032-07bf70b0add1?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dXJsfGVufDB8fDB8fHww"
-             )}"              
-              width="256"
-              height="256"
+              <div  style="display:flex; font-weight:100;flex-shrink:0;">
+                <span style="color:rgb(73, 73, 252);"
+                  >Start: ${start_date}</span>
+                    
+              </div>
+              <div  style="display:flex; font-weight:100;flex-shrink:0;">
+                <span style="color:rgb(73, 73, 252);"
+                  >End: ${end_date}</span>
+                    
+              </div>
+            </div>
+              <div class="category-description">
+                <span
+                  >${description}</span
+                >
               
-              alt=""
-            />
-          </div>
-  
-          </a
-        >
-      </h3>
-  
-      <div class="category-description">
-        <span
-          >${description}</span
-        >
-      </div>      
-      <div class="category-description">
-        <span
-          >Release Date: ${release_date}</span
-        >
-      </div>      
-      <div style="display: flex; justify-content: flex-end;margin-right:1em;margin-bottom:1em;">        
-        <button id="social"><i class="fas fa-share-alt"></i></button>
-        </div>
-    </td></tr>
-  `;
-    const templateArticle = ({
-      article_title = "Article Title",
-      article_description = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo iure autem reiciendis tenetur. Eaque placeat adipisci officiis facere commodi non corporis veniam repellat nesciunt, quasi neque dolore labore voluptatibus laborum.",
-      article_author = "John Doe",
-      article_date = "2023-10-01",
-      article_url = "https://easihub.com/tags/c/plm-product-lifecycle-management/generic-plm-topics/1581/articles",
-      article_thumbnail_url = "https://plus.unsplash.com/premium_photo-1683865776032-07bf70b0add1?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dXJsfGVufDB8fDB8fHww",
-    }) => `
+              </div>   
+              
+              <div style="display: flex; justify-content: space-between;margin-right:1em;">        
+                <div class="category-description" style="margin-bottom:0;font-weight:700"> ${source_name}</div>   
+                <div class="category-description" style="margin-bottom:0">|</div>   
+                <div class="category-description" style="margin-bottom:0"> ${author_name}</div>   
+                <button id="social" style="color:rgb(73, 73, 252)"><i class="fas fa-share-alt"></i></button>
+                </div>
+            </td></tr>
+          `;
+    };
+    
+      
+  const templateArticle =  ({
+    title = "Article Title",
+    software_name,
+    domain_name,
+    source_name,
+    description = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo iure autem reiciendis tenetur. Eaque placeat adipisci officiis facere commodi non corporis veniam repellat nesciunt, quasi neque dolore labore voluptatibus laborum.",
+    author_name = "John Doe",
+    topic_date = "2023-10-01",
+    url = "https://easihub.com/tags/c/plm-product-lifecycle-management/generic-plm-topics/1581/articles",
+    thumbnail_url ,
+  }) => {
+    
+    return `
         <tr data-category-id="69" data-notification-level="regular" class="has-description          
                   has-logo">
         <td class="category" style="--category-badge-color: #231f20">
             <h3 id="ember1277" class="ember-view">
-              <a target="_blank" class="category-title-link" href="${article_url}">
-                <div class="category-text-title">
+              <a target="_blank" class="category-title-link" href="${url}">
+                
+                
+                
+                <div class="category-logo aspect-image">
+                  <img
+                  src="${getThumbNail(
+                    thumbnail_url,
+                    "https://plus.unsplash.com/premium_photo-1683865776032-07bf70b0add1?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dXJsfGVufDB8fDB8fHww"
+                  )}"
+                    src="${thumbnail_url}"
+                    width="256"
+                    height="256"
+                    
+                    alt=""
+                  />
+                </div>
+                <div class="category-text-title" style="margin:1em 0 0.5em 0;color:rgba(0,0,0,.6);display:flex; font-size:0.8em;">
+                  <span 
+                    >${domain_name}|${software_name}</span>
+                      
+                </div>
+                <div style="order:3;font-size:1.2em;">
                   <span class="category-name"
                     ><span
                       ><span
@@ -299,45 +279,38 @@ function toggleHelp(item) {
                           data-category-id="31"
                           data-drop-close="true"
                           class="badge-category --style-square"
-                          title="${article_description}"
-                          ><span class="badge-category__name">${article_title}</span></span
+                          title="${description}"
+                          ><span class="badge-category__name">${title}</span></span
                         ></span
                       ></span
                     ></span
                   >
                 </div>
-  
-                <div class="category-logo aspect-image">
-                  <img
-                  src="${getThumbNail(
-                    article_thumbnail_url,
-                    "https://plus.unsplash.com/premium_photo-1683865776032-07bf70b0add1?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dXJsfGVufDB8fDB8fHww"
-                  )}"
-                    src="${article_thumbnail_url}"
-                    width="256"
-                    height="256"
-                    
-                    alt=""
-                  />
+                <div class="category-text-title" style="margin:0 0 0.5em 0;display:flex; font-size:0.8em; order:2;">
+                  <span style="color:rgb(0,220,220);"
+                    >${topic_date}</span>
+                      
                 </div>
-  
                 </a
               >
             </h3>
   
             <div class="category-description">
               <span
-                >${article_description} - ${article_date}</span
+                >${description}</span
               >
             
             </div>   
             
             <div style="display: flex; justify-content: space-between;margin-right:1em;">        
-              <div class="category-description" style="margin-bottom:0"> <em>Author: ${article_author}</em></div>   
-              <button id="social"><i class="fas fa-share-alt"></i></button>
+              <div class="category-description" style="margin-bottom:0;font-weight:700"> ${source_name}</div>   
+              <div class="category-description" style="margin-bottom:0">|</div>   
+              <div class="category-description" style="margin-bottom:0"> ${author_name}</div>   
+              <button id="social" style="color:rgb(73, 73, 252)"><i class="fas fa-share-alt"></i></button>
               </div>
           </td></tr>
         `;
+  };
   
     const resultHtml = (tds) => `
   <div id="list-area">
@@ -406,7 +379,104 @@ function toggleHelp(item) {
         return "";
       }
     };
-    const displayResults = async (results) => {
+    const templateBulletin=({
+      title = "Article Title",
+      software_name,
+      version_name,
+      domain_name,
+      source_name,
+      description = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo iure autem reiciendis tenetur. Eaque placeat adipisci officiis facere commodi non corporis veniam repellat nesciunt, quasi neque dolore labore voluptatibus laborum.",
+      author_name = "John Doe",
+      release_date = "2023-10-01",
+      topic_date,
+      url = "https://easihub.com/tags/c/plm-product-lifecycle-management/generic-plm-topics/1581/articles",
+      thumbnail_url ,
+    }) => {
+      
+      return `
+          <tr data-category-id="69" data-notification-level="regular" class="has-description          
+                    has-logo">
+          <td class="category" style="--category-badge-color: #231f20">
+              <h3 id="ember1277" class="ember-view">
+                <a target="_blank" class="category-title-link" href="${url}">
+                  
+                  
+                  
+                  <div class="category-logo aspect-image">
+                    <img
+                    src="${getThumbNail(
+                      thumbnail_url,
+                      "https://plus.unsplash.com/premium_photo-1683865776032-07bf70b0add1?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dXJsfGVufDB8fDB8fHww"
+                    )}"
+                      src="${thumbnail_url}"
+                      width="256"
+                      height="256"
+                      
+                      alt=""
+                    />
+                  </div>
+                  <div class="category-text-title" style="margin:1em 0 0.5em 0;color:rgba(0,0,0,.6);display:flex; font-size:0.8em;">
+                    <span 
+                      >${domain_name}|${software_name}</span>
+                        
+                  </div>
+                  <div style="order:3;font-size:1.2em;">
+                    <span class="category-name"
+                      ><span
+                        ><span
+                          class="badge-category__wrapper"
+                          style="
+                            --category-badge-color: #231f20;
+                            --category-badge-text-color: #ffffff;
+                          "
+                          ><span
+                            data-category-id="31"
+                            data-drop-close="true"
+                            class="badge-category --style-square"
+                            title="${description}"
+                            ><span class="badge-category__name">${title}</span></span
+                          ></span
+                        ></span
+                      ></span
+                    >
+                  </div>
+                  <div class="category-text-title" style="margin:0 0 0.5em 0;display:flex; font-size:0.8em; order:2;">
+                    <span style="color:rgb(0,220,220);"
+                      >${topic_date}</span>
+                        
+                  </div>
+                  </a
+                >
+              </h3>
+              <div>
+              <div  style="display:flex; font-weight:100;flex-shrink:0;">
+                <span style="color:rgb(73, 73, 252);"
+                  >${version_name}</span>
+                    
+              </div>
+              <div  style="display:flex; font-weight:100;flex-shrink:0;">
+                <span style="color:rgb(73, 73, 252);"
+                  >Release Date: ${release_date}</span>
+                    
+              </div>
+              </div>
+              <div class="category-description">
+                <span
+                  >${description}</span
+                >
+              
+              </div>   
+              
+              <div style="display: flex; justify-content: space-between;margin-right:1em;">        
+                <div class="category-description" style="margin-bottom:0;font-weight:700"> ${source_name}</div>   
+                <div class="category-description" style="margin-bottom:0">|</div>   
+                ${author_name.length?`<div class="category-description" style="margin-bottom:0;width: 100px;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;"> ${author_name}</div>`:''}   
+                <button id="social" style="color:rgb(73, 73, 252)"><i class="fas fa-share-alt"></i></button>
+                </div>
+            </td></tr>
+          `;
+    };
+    const displayResults = async (results,page_size) => {
       results.page_num = page_num;
       results.page_size = page_size;
       const filtered = await responseApi(results);
@@ -416,18 +486,23 @@ function toggleHelp(item) {
         resultTds = ``;
       }
       if (filtered?.length) {
-        filtered.forEach((x) => {
-          if (x.event_name) {
-            resultTds += templateEvent(x);
-          }
-          if (x.version_name) {
-            resultTds += templateBulletin(x);
-          }
-          if (x.article_title) {
-            resultTds += templateArticle(x);
+        
+         filtered.forEach( (x) => {
+          switch (x.topic_type) {
+            case "events":
+              resultTds +=  templateEvent(x);
+              break;
+            case "articles":
+              resultTds +=  templateArticle(x);
+              break;
+            case "bulletins":
+              resultTds +=  templateBulletin(x);
+              break;
           }
         });
-        if (totalRecords > page_size * page_num) showMore = true;
+        
+        if (totalRecords > results.page_size * page_num) showMore = true; 
+        else showMore=false;
         const resultsToDisplay = resultHtml(resultTds);
         console.log(resultsToDisplay);
         //setTimeout(() => {
@@ -506,7 +581,8 @@ function toggleHelp(item) {
           
           (async () => {
             page_num = page_num + 1;
-            await displayResults(results, page_num);            
+            //if (totalRecords > (page_size) * page_num) showMore = true;
+            await displayResults(results, page_size);            
           })();
         }
       });
@@ -520,13 +596,15 @@ function toggleHelp(item) {
         }
       }
       const urlParams = getSubCategory();
+      debugger
       const results = await getCategoryName(urlParams);
       if (!results.software_name) {
         results.software_name = results.domain_name;
       }
       totalRecords = await responseApiCount(results);
+      console.log("totalRecords", totalRecords);
       //Actual logic
-      await displayResults(results);
+      await displayResults(results,page_size);
     } catch (error) {
       console.log("error", error);
     }

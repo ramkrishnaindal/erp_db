@@ -2,15 +2,19 @@ const mongoose = require("mongoose");
 
 const ErpCollection = new mongoose.Schema(
   {
-    article_title: {
+    title: {
       type: String,
       required: false,
     },
-    article_description: {
+    description: {
       type: String,
       required: false,
     },
-    article_author: {
+    author_name: {
+      type: String,
+      required: false,
+    },
+    source_name: {
       type: String,
       required: false,
     },
@@ -18,11 +22,15 @@ const ErpCollection = new mongoose.Schema(
       type: String, // Keeping it as a string to match the format "5 April, 2025"
       required: false,
     },
-    article_url: {
+    topic_date: {
+      type: String, // Keeping it as a string to match the format "5 April, 2025"
+      required: false,
+    },
+    url: {
       type: String,
       required: false,
     },
-    article_thumbnail_url: {
+    thumbnail_url: {
       type: String,
       required: false,
     },
@@ -38,11 +46,11 @@ const ErpCollection = new mongoose.Schema(
       type: String,
       required: false,
     },
-    description: {
+    event_type: {
       type: String,
       required: false,
     },
-    url: {
+    description: {
       type: String,
       required: false,
     },
@@ -50,25 +58,15 @@ const ErpCollection = new mongoose.Schema(
       type: String,
       required: false,
     },
-    event_start_date: {
+    start_date: {
       type: String,
       required: false,
     },
-    event_end_date: {
+    end_date: {
       type: String,
       required: false,
     },
-    event_description: {
-      type: String,
-    },
-    event_page_url: {
-      type: String,
-      required: false,
-    },
-    event_thumbnail_url: {
-      type: String,
-      required: false,
-    },
+
     error: {
       type: Boolean,
       required: false,
