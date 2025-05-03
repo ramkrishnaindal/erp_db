@@ -46,6 +46,20 @@ function toggleHelp(item) {
   
   let resultTds;
   api.onPageChange(async () => {
+    let colorCodes=[
+        { key:'conference', value: '#007bff'},
+        { key:'webinar'  , value: '#28a745'},
+        { key:'seminar'  , value: '#17a2b8'},
+        { key:'workshop'  , value: '#ffc107'},
+        { key:'summit'  , value: '#6610f2'},
+        { key:'meetup'  , value: '#fd7e14'},
+        { key:'roundtable'  , value: '#6f42c1'},
+        { key:'launch event'  , value: '#e83e8c'},
+        { key:'lecture series'  , value: '#20c997'},
+        { key:'bootcamp'  , value: '#343a40'},
+        { key:'technical training'  , value: '#17a2b8'},
+        { key:'panel discussion'  , value: '#dc3545'},              
+    ];
     let page_size = 9;
     let page_num = 1;
     if (categoriesList.length === 0) {
@@ -102,22 +116,37 @@ function toggleHelp(item) {
         console.error("Error making POST request:", error);
       }
     };
+    function hexToRgb(hex) {
+      var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+      } : null;
+    }
+    function componentToHex(c) {
+      var hex = c.toString(16);
+      return hex.length == 1 ? "0" + hex : hex;
+    }
+    function rgbToHex(r, g, b) {
+      return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+    }
+
     function getEventLabelColor(eventType) {
-      switch (eventType.toLowerCase()) {
-        case 'conference': return '#007bff';
-        case 'webinar': return '#28a745';
-        case 'seminar': return '#17a2b8';
-        case 'workshop': return '#ffc107';
-        case 'summit': return '#6610f2';
-        case 'meetup': return '#fd7e14';
-        case 'roundtable': return '#6f42c1';
-        case 'launch event': return '#e83e8c';
-        case 'lecture series': return '#20c997';
-        case 'bootcamp': return '#343a40';
-        case 'technical training': return '#17a2b8';
-        case 'panel discussion': return '#dc3545';
-        default: return '#007bff'; // default blue
-      }
+      const findColor=colorCodes.find(x=>x.key===eventType.toLowerCase())
+      if(findColor){ 
+        return findColor.value;
+      }else {
+        debugger
+        
+        const rgb=hexToRgb(colorCodes[colorCodes.length-1].value); // default blue
+        rgb.r=(rgb.r+40)%255;
+        rgb.g=(rgb.g+120)%255;
+        rgb.b=(rgb.b+200)%255;
+        const hexValue=rgbToHex(rgb.r,rgb.g,rgb.b);
+        colorCodes.push({key:eventType.toLowerCase(),value:hexValue});
+        return hexValue;
+      }      
     }
     const getThumbNail = (original, defaultUrl) => {
       if (
@@ -155,7 +184,7 @@ function toggleHelp(item) {
                   
                   
                   <div class="category-logo aspect-image">
-                    <div class="event-label" style="background:${getEventLabelColor(event_type)};">${event_type}</div>
+                    <div class="event-label" style="background:${getEventLabelColor(event_type)};">${event_type||"Events"}</div>
                     <img
                     src="${getThumbNail(
                       thumbnail_url,
@@ -596,7 +625,7 @@ function toggleHelp(item) {
         }
       }
       const urlParams = getSubCategory();
-      debugger
+      // debugger
       const results = await getCategoryName(urlParams);
       if (!results.software_name) {
         results.software_name = results.domain_name;
