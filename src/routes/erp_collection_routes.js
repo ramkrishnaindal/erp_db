@@ -2,12 +2,19 @@ const express = require("express");
 const router = express.Router();
 const ErpCollection = require("../models/erp_collection");
 const isUrlValid = async (urlThumbnail) => {
-  const response = await fetch(urlThumbnail);
-  // Check if the response is successful
-  if (!response.ok) {
+  try {
+    // Check if the URL is valid
+    const response = await fetch(urlThumbnail);
+    // Check if the response is successful
+    if (!response.ok) {
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.error("Error fetching URL:", err);
+    // If the URL is not valid, return false
     return false;
   }
-  return true;
 };
 // Get all documents
 router.post("/", async (req, res) => {
