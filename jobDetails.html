@@ -1,0 +1,222 @@
+<html>
+  <head>
+    <style>
+      body {
+        font-family: "Roboto", sans-serif;
+        background: #f4f6fa;
+        padding: 20px !important;
+      }
+
+      .job-card {
+        background: #fff;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        max-width: 850px;
+        margin: auto;
+      }
+
+      .job-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-wrap: wrap;
+      }
+
+      .job-title {
+        font-size: 22px;
+        font-weight: bold;
+        color: #222;
+      }
+
+      .company {
+        font-size: 16px;
+        color: #555;
+      }
+
+      .location {
+        font-size: 14px;
+        color: #777;
+      }
+
+      .apply-btn {
+        background: #204ecf;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 10px 16px;
+        font-weight: bold;
+        cursor: pointer;
+        margin-top: 8px;
+      }
+
+      .section {
+        margin-top: 20px;
+      }
+
+      .section h3 {
+        margin-bottom: 8px;
+        color: #333;
+        font-size: 16px;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 4px;
+      }
+
+      .tags,
+      .benefits {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .tag,
+      .benefit {
+        background: #e9efff;
+        color: #204ecf;
+        padding: 5px 10px;
+        font-size: 13px;
+        border-radius: 5px;
+      }
+
+      .description {
+        font-size: 14px;
+        color: #444;
+        line-height: 1.6;
+        white-space: pre-wrap;
+      }
+
+      .meta {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 6px;
+      }
+
+      .highlights {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .highlight {
+        background: #f0f2ff;
+        border: 1px solid #d1d7f3;
+        border-radius: 5px;
+        padding: 6px 10px;
+        font-size: 13px;
+        color: #204ecf;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="job-card"></div>
+    <script>
+      const template = ({
+        job_title,
+        company_name,
+        job_location,
+        employment_type,
+        contract_duration,
+        salary_range,
+        work_location_type,
+        expected_hours_per_week,
+        posted_date,
+        job_functions,
+        benefits,
+        qualifications,
+        full_job_description,
+        apply_url,
+      }) => {
+        const jobFunctionsList = job_functions.map((x) => {
+          return `<div class="tag">${x}</div>`;
+        });
+        const benefitsList = benefits.map((x) => {
+          return `<div class="benefit">${x}</div>`;
+        });
+        const qualificationsList = qualifications.map((x) => {
+          return `<div class="tag">${x}</div>`;
+        });
+        return `
+    <div class="job-header">
+    <div>
+      <div class="job-title">${job_title}</div>
+      <div class="company">${company_name}</div>
+      <div class="location">${job_location}</div>
+      <div class="highlights">
+        <div class="highlight">🕒 ${employment_type} · ${contract_duration}</div>
+        <div class="highlight">${salary_range}</div>
+        <div class="highlight">🏢 ${work_location_type}</div>
+        <div class="highlight">🕘 ${expected_hours_per_week} hrs/week</div>
+        <div class="highlight">📅 Posted ${posted_date}</div>
+      </div>
+    </div>
+    <a href="${apply_url}" target="_blank"><button class="apply-btn">Quick Apply</button></a>
+  </div>
+
+  <div class="section">
+    <h3>Job Function & Tools</h3>
+    <div class="tags">
+        ${jobFunctionsList.join("")}
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Benefits</h3>
+    <div class="benefits">
+      ${benefitsList.join("")}
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Qualifications</h3>
+    <div class="tags">
+      ${qualificationsList.join("")}
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Full Job Description</h3>
+    <div class="description">
+        <pre>${full_job_description}</pre>        
+    </div>
+  </div>
+    `;
+      };
+      const responseApi = async (data) => {
+        try {
+          const response = await fetch(
+            "https://erp-db-glqn.onrender.com/api/erp-collections/jobs/details",
+            {
+              method: "POST", // HTTP method
+              headers: {
+                "Content-Type": "application/json", // Specify the content type
+              },
+              body: JSON.stringify(data), // Convert the data object to a JSON string
+            }
+          );
+
+          // Check if the response is successful
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          // Parse the JSON response
+          const result = await response.json();
+          console.log("Response from server:", result);
+          return result;
+        } catch (error) {
+          console.error("Error making POST request:", error);
+        }
+      };
+      (async () => {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const id = urlParams.get("id");
+        if (id) {
+          const results = await responseApi({ _id: id });
+          const templateString = template(results);
+          document.querySelector(".job-card").innerHTML = templateString;
+        }
+      })();
+    </script>
+  </body>
+</html>

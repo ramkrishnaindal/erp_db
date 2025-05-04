@@ -1,0 +1,32 @@
+{
+  "job_title": "SAP HCM Consultant",
+  "company_name": "Aptude, Inc",
+  "company_rating": "4.0",
+  "job_location": "Burbank, CA",
+  "employment_type": "Contract",
+  "contract_duration": "12 months",
+  "salary_range": "$65\u2013$75/hr",
+  "work_location_type": "On-site",
+  "expected_hours_per_week": 40,
+  "posted_date": "2 days ago",
+  "apply_button_label": "Quick Apply",
+  "apply_url": "https://apply.easihub.com/job/12345",
+  "job_functions": [
+    "Functional Consultant"
+  ],
+  "technologies": [
+    "SAP SuccessFactors",
+    "Payroll",
+    "Time Management"
+  ],
+  "benefits": [
+    "401(k)",
+    "Health insurance"
+  ],
+  "qualifications": [
+    "5 years experience",
+    "Senior Level",
+    "Root cause analysis"
+  ],
+  "full_job_description": "1. Expertise in US payroll and taxes\n2. BSI tax factory configuration...\n..."
+}

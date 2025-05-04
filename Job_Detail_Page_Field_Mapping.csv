@@ -1,0 +1,18 @@
+UI Label,Field Name,Data Type,Example Value
+Job Title,job_title,string,SAP HCM Consultant
+Company Name,company_name,string,"Aptude, Inc"
+Company Rating,company_rating,string,4.0
+Location,job_location,string,"Burbank, CA"
+Employment Type,employment_type,string,Contract
+Contract Duration,contract_duration,string,12 months
+Salary Range,salary_range,string,$65–$75/hr
+Work Mode,work_location_type,string,On-site
+Expected Hours/Week,expected_hours_per_week,number,40
+Posted Date,posted_date,string,2 days ago
+Apply Button Label,apply_button_label,string,Quick Apply
+Apply URL,apply_url,URL,https://apply.easihub.com/job/12345
+Job Functions,job_functions,array[string],['Functional Consultant']
+Technologies/Tools,technologies,array[string],"['SAP SuccessFactors', 'Payroll', 'Time Management']"
+Benefits,benefits,array[string],"['401(k)', 'Health insurance']"
+Qualifications,qualifications,array[string],"['5 years experience', 'Senior Level', 'Root cause analysis']"
+Full Job Description,full_job_description,string,Full paragraph as shown in card
