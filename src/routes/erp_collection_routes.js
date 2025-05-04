@@ -46,6 +46,11 @@ router.post("/", async (req, res) => {
                 ),
               },
               release_date: { $ne: "" },
+              source_name: {
+                $ne: {
+                  $regex: new RegExp("^scribd.com", "i"),
+                },
+              },
             },
           }, // Filter documents
           // {
@@ -80,6 +85,11 @@ router.post("/", async (req, res) => {
                   ),
                 },
                 release_date: { $ne: "" },
+                source_name: {
+                  $ne: {
+                    $regex: new RegExp("^scribd.com", "i"),
+                  },
+                },
               },
             }, // Filter documents
             // {
@@ -109,6 +119,11 @@ router.post("/", async (req, res) => {
                 ),
               },
               topic_date: { $ne: "" },
+              source_name: {
+                $ne: {
+                  $regex: new RegExp("^scribd.com", "i"),
+                },
+              },
             },
           }, // Filter documents
           {
@@ -143,6 +158,11 @@ router.post("/", async (req, res) => {
                   ),
                 },
                 topic_date: { $ne: "" },
+                source_name: {
+                  $ne: {
+                    $regex: new RegExp("^scribd.com", "i"),
+                  },
+                },
               },
             }, // Filter documents
             {
@@ -173,6 +193,11 @@ router.post("/", async (req, res) => {
               },
               start_date: { $ne: "" },
               start_date: { $ne: "TBD" },
+              source_name: {
+                $ne: {
+                  $regex: new RegExp("^scribd.com", "i"),
+                },
+              },
             },
           }, // Filter documents
           // {
@@ -208,6 +233,11 @@ router.post("/", async (req, res) => {
                 },
                 start_date: { $ne: "" },
                 start_date: { $ne: "TBD" },
+                source_name: {
+                  $ne: {
+                    $regex: new RegExp("^scribd.com", "i"),
+                  },
+                },
               },
             }, // Filter documents
             // {
@@ -222,48 +252,6 @@ router.post("/", async (req, res) => {
         break;
     }
 
-    if (!results.length)
-      results = await ErpCollection.find({
-        domain_name: {
-          $regex: new RegExp("^" + domain_name.toLowerCase().trim(), "i"),
-        },
-        topic_type: {
-          $regex: new RegExp("^" + topic_type.toLowerCase().trim(), "i"),
-        },
-        version_name: {
-          $regex: new RegExp("^" + software_name.toLowerCase().trim(), "i"),
-        },
-      })
-        .skip((page_num - 1) * page_size)
-        .limit(page_size);
-    if (!results.length)
-      results = await ErpCollection.find({
-        domain_name: {
-          $regex: new RegExp("^" + domain_name.toLowerCase().trim(), "i"),
-        },
-        topic_type: {
-          $regex: new RegExp("^" + topic_type.toLowerCase().trim(), "i"),
-        },
-        event_name: {
-          $regex: new RegExp("^" + software_name.toLowerCase().trim(), "i"),
-        },
-      })
-        .skip((page_num - 1) * page_size)
-        .limit(page_size);
-    if (!results.length)
-      results = await ErpCollection.find({
-        domain_name: {
-          $regex: new RegExp("^" + domain_name.toLowerCase().trim(), "i"),
-        },
-        topic_type: {
-          $regex: new RegExp("^" + topic_type.toLowerCase().trim(), "i"),
-        },
-        article_title: {
-          $regex: new RegExp("^" + software_name.toLowerCase().trim(), "i"),
-        },
-      })
-        .skip((page_num - 1) * page_size)
-        .limit(page_size);
     results = results.map(async (result) => {
       // debugger;
       const isValid =
@@ -318,6 +306,11 @@ router.post("/count", async (req, res) => {
                 ),
               },
               release_date: { $ne: "" },
+              source_name: {
+                $ne: {
+                  $regex: new RegExp("^scribd.com", "i"),
+                },
+              },
             },
           },
           { $count: "total" },
@@ -345,6 +338,11 @@ router.post("/count", async (req, res) => {
                   ),
                 },
                 release_date: { $ne: "" },
+                source_name: {
+                  $ne: {
+                    $regex: new RegExp("^scribd.com", "i"),
+                  },
+                },
               },
             },
             { $count: "total" },
@@ -367,6 +365,11 @@ router.post("/count", async (req, res) => {
                 ),
               },
               topic_date: { $ne: "" },
+              source_name: {
+                $ne: {
+                  $regex: new RegExp("^scribd.com", "i"),
+                },
+              },
             },
           },
           { $count: "total" },
@@ -394,6 +397,11 @@ router.post("/count", async (req, res) => {
                   ),
                 },
                 release_date: { $ne: "" },
+                source_name: {
+                  $ne: {
+                    $regex: new RegExp("^scribd.com", "i"),
+                  },
+                },
               },
             },
             { $count: "total" },
@@ -417,6 +425,11 @@ router.post("/count", async (req, res) => {
               },
               start_date: { $ne: "" },
               start_date: { $ne: "TBD" },
+              source_name: {
+                $ne: {
+                  $regex: new RegExp("^scribd.com", "i"),
+                },
+              },
             },
           },
           { $count: "total" },
@@ -444,6 +457,11 @@ router.post("/count", async (req, res) => {
                   ),
                 },
                 release_date: { $ne: "" },
+                source_name: {
+                  $ne: {
+                    $regex: new RegExp("^scribd.com", "i"),
+                  },
+                },
               },
             },
             { $count: "total" },
