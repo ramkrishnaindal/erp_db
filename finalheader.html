@@ -156,17 +156,17 @@ function toggleHelp(item) {
         return hexValue;
       }      
     }
-    const getThumbNail = (original, defaultUrl) => {
-      if (
-        original?.includes(".png") ||
-        original?.includes(".jpg") ||
-        original?.includes(".jpeg")
-      ) {
-        return original;
-      } else {
-        return defaultUrl;
-      }
-    };
+    // const getThumbNail = (original, defaultUrl) => {
+    //   if (
+    //     original?.includes(".png") ||
+    //     original?.includes(".jpg") ||
+    //     original?.includes(".jpeg")
+    //   ) {
+    //     return original;
+    //   } else {
+    //     return defaultUrl;
+    //   }
+    // };
     const templateEvent =({
       title ,
       software_name,
@@ -194,10 +194,7 @@ function toggleHelp(item) {
                   <div class="category-logo aspect-image">
                     <div class="event-label" style="background:${getEventLabelColor((event_type||"Event"))};">${event_type||"Event"}</div>
                     <img
-                    src="${getThumbNail(
-                      thumbnail_url,
-                      "https://plus.unsplash.com/premium_photo-1683865776032-07bf70b0add1?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dXJsfGVufDB8fDB8fHww"
-                    )}"
+                    
                       src="${thumbnail_url}"
                       width="256"
                       height="256"
@@ -287,10 +284,7 @@ function toggleHelp(item) {
                 
                 <div class="category-logo aspect-image">
                   <img
-                  src="${getThumbNail(
-                    thumbnail_url,
-                    "https://plus.unsplash.com/premium_photo-1683865776032-07bf70b0add1?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dXJsfGVufDB8fDB8fHww"
-                  )}"
+                  
                     src="${thumbnail_url}"
                     width="256"
                     height="256"
@@ -440,11 +434,7 @@ function toggleHelp(item) {
                   
                   
                   <div class="category-logo aspect-image">
-                    <img
-                    src="${getThumbNail(
-                      thumbnail_url,
-                      "https://plus.unsplash.com/premium_photo-1683865776032-07bf70b0add1?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8dXJsfGVufDB8fDB8fHww"
-                    )}"
+                    <img                  
                       src="${thumbnail_url}"
                       width="256"
                       height="256"
