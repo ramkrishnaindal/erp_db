@@ -39,6 +39,22 @@ router.post("/jobs", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+router.post("/jobs/count", async (req, res) => {
+  try {
+    const { software_name, domain_name } = req.body;
+    const results = jobs.filter(
+      (job) =>
+        job.software_name.toLowerCase().trim() ===
+          software_name.toLowerCase().trim() &&
+        job.domain_name.toLowerCase().trim() ===
+          domain_name.toLowerCase().trim()
+    ).length;
+
+    return res.status(200).json(results);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 // Get all documents
 router.post("/", async (req, res) => {
   try {
