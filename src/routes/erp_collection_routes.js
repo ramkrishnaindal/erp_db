@@ -27,19 +27,98 @@ router.post("/", async (req, res) => {
       page_size = 9,
     } = req.body;
     let results = [];
-    results = await ErpCollection.find({
-      domain_name: {
-        $regex: new RegExp("^" + domain_name.toLowerCase().trim(), "i"),
-      },
-      topic_type: {
-        $regex: new RegExp("^" + topic_type.toLowerCase().trim(), "i"),
-      },
-      software_name: {
-        $regex: new RegExp("^" + software_name.toLowerCase().trim(), "i"),
-      },
-    })
-      .skip((page_num - 1) * page_size)
-      .limit(page_size);
+
+    switch (topic_type.toLowerCase()) {
+      case "bulletins":
+        results = await ErpCollection.aggregate([
+          {
+            $match: {
+              domain_name: {
+                $regex: new RegExp("^" + domain_name.toLowerCase().trim(), "i"),
+              },
+              topic_type: {
+                $regex: new RegExp("^" + topic_type.toLowerCase().trim(), "i"),
+              },
+              software_name: {
+                $regex: new RegExp(
+                  "^" + software_name.toLowerCase().trim(),
+                  "i"
+                ),
+              },
+              release_date: { $ne: "" },
+            },
+          }, // Filter documents
+          // {
+          //   $addFields: {
+          //     release_date_as_date: { $toDate: "$release_date" }, // Convert string to Date
+          //   },
+          // },
+          // { $sort: { release_date_as_date: -1 } }, // Sort by the converted date in descending order
+          { $skip: (page_num - 1) * page_size }, // Pagination: Skip documents
+          { $limit: page_size }, // Pagination: Limit the number of documents
+        ]);
+        const relDates = results.map((result) => result.release_date);
+        break;
+      case "articles":
+        results = await ErpCollection.aggregate([
+          {
+            $match: {
+              domain_name: {
+                $regex: new RegExp("^" + domain_name.toLowerCase().trim(), "i"),
+              },
+              topic_type: {
+                $regex: new RegExp("^" + topic_type.toLowerCase().trim(), "i"),
+              },
+              software_name: {
+                $regex: new RegExp(
+                  "^" + software_name.toLowerCase().trim(),
+                  "i"
+                ),
+              },
+              topic_date: { $ne: "" },
+            },
+          }, // Filter documents
+          {
+            $addFields: {
+              topic_date_as_date: { $toDate: "$topic_date" }, // Convert string to Date
+            },
+          },
+          { $sort: { topic_date_as_date: -1 } }, // Sort by the converted date in descending order
+          { $skip: (page_num - 1) * page_size }, // Pagination: Skip documents
+          { $limit: page_size }, // Pagination: Limit the number of documents
+        ]);
+        break;
+      case "events":
+        results = await ErpCollection.aggregate([
+          {
+            $match: {
+              domain_name: {
+                $regex: new RegExp("^" + domain_name.toLowerCase().trim(), "i"),
+              },
+              topic_type: {
+                $regex: new RegExp("^" + topic_type.toLowerCase().trim(), "i"),
+              },
+              software_name: {
+                $regex: new RegExp(
+                  "^" + software_name.toLowerCase().trim(),
+                  "i"
+                ),
+              },
+              start_date: { $ne: "" },
+              start_date: { $ne: "TBD" },
+            },
+          }, // Filter documents
+          // {
+          //   $addFields: {
+          //     start_date_as_date: { $toDate: "$start_date" }, // Convert string to Date
+          //   },
+          // },
+          // { $sort: { start_date_as_date: -1 } }, // Sort by the converted date in descending order
+          { $skip: (page_num - 1) * page_size }, // Pagination: Skip documents
+          { $limit: page_size }, // Pagination: Limit the number of documents
+        ]);
+        break;
+    }
 
     if (!results.length)
       results = await ErpCollection.find({
@@ -110,7 +189,7 @@ router.post("/", async (req, res) => {
       return { ...result };
     });
     results = await Promise.all(results);
-    res.status(200).json(results.map((result) => result._doc));
+    res.status(200).json(results);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

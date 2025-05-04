@@ -192,7 +192,7 @@ function toggleHelp(item) {
                   
                   
                   <div class="category-logo aspect-image">
-                    <div class="event-label" style="background:${getEventLabelColor(event_type)};">${event_type||"Events"}</div>
+                    <div class="event-label" style="background:${getEventLabelColor((event_type||"Event"))};">${event_type||"Event"}</div>
                     <img
                     src="${getThumbNail(
                       thumbnail_url,
@@ -207,7 +207,7 @@ function toggleHelp(item) {
                   </div>
                   <div class="category-text-title" style="margin:1em 0 0.5em 0;color:rgba(0,0,0,.6);display:flex; font-size:0.8em;">
                     <span 
-                      >${domain_name}|${software_name}</span>
+                      >${domain_name}${"   "}|${"   "}${software_name}</span>
                         
                   </div>
                   <div style="order:3;font-size:1.2em;">
@@ -300,7 +300,7 @@ function toggleHelp(item) {
                 </div>
                 <div class="category-text-title" style="margin:1em 0 0.5em 0;color:rgba(0,0,0,.6);display:flex; font-size:0.8em;">
                   <span 
-                    >${domain_name}|${software_name}</span>
+                    >${domain_name}${"   "}|${"   "}${software_name}</span>
                       
                 </div>
                 <div style="order:3;font-size:1.2em;">
@@ -454,7 +454,7 @@ function toggleHelp(item) {
                   </div>
                   <div class="category-text-title" style="margin:1em 0 0.5em 0;color:rgba(0,0,0,.6);display:flex; font-size:0.8em;">
                     <span 
-                      >${domain_name}|${software_name}</span>
+                      >${domain_name}${"   "}|${"   "}${software_name}</span>
                         
                   </div>
                   <div style="order:3;font-size:1.2em;">
@@ -617,6 +617,12 @@ function toggleHelp(item) {
         if (event.target.id == "showMore") {
           
           (async () => {
+            const urlParams = getSubCategory();
+            // debugger
+            const results = await getCategoryName(urlParams);
+            if (!results.software_name) {
+              results.software_name = results.domain_name;
+            }
             page_num = page_num + 1;
             //if (totalRecords > (page_size) * page_num) showMore = true;
             await displayResults(results, page_size);            
