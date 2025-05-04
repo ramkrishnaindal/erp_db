@@ -36,7 +36,7 @@ function toggleHelp(item) {
 </script>
 <script type="text/discourse-plugin" version="0.8">//
   const categories = async () => {
-    const response = await fetch("https://easihub.com/site.json");
+    const response = await fetch("/site.json");
     // Check if the response is successful
     if (!response.ok) {
       throw new Error(`HTTP error! Status: ${response.status}`);
@@ -480,8 +480,8 @@ function toggleHelp(item) {
   </div></div></div>
   `;
     const getSubCategory = () => {
-      const pathArr = //window.location.pathname.split(
-        `https://easihub.com/tags/c/plm-product-lifecycle-management/teamcenter/686/jobs`.split(
+      const pathArr = window.location.pathname.split(
+        //`https://easihub.com/tags/c/plm-product-lifecycle-management/teamcenter/686/jobs`.split(
           "/"
         );
       //window.location.path
