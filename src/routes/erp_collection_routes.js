@@ -39,6 +39,16 @@ router.post("/jobs", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+router.post("/jobs/details", async (req, res) => {
+  try {
+    const { _id } = req.body;
+    const result = jobs.find((job) => job._id === _i);
+
+    return res.status(200).json(result);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 router.post("/jobs/count", async (req, res) => {
   try {
     const { software_name, domain_name } = req.body;
