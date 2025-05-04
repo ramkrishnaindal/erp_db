@@ -47,9 +47,10 @@ router.post("/", async (req, res) => {
               },
               release_date: { $ne: "" },
               source_name: {
-                $ne: {
-                  $regex: new RegExp("^scribd.com", "i"),
-                },
+                $ne: "scribd.com",
+                // {
+                //   $regex: new RegExp("^scribd.com", "i"),
+                // },
               },
             },
           }, // Filter documents
@@ -86,9 +87,10 @@ router.post("/", async (req, res) => {
                 },
                 release_date: { $ne: "" },
                 source_name: {
-                  $ne: {
-                    $regex: new RegExp("^scribd.com", "i"),
-                  },
+                  $ne: "scribd.com",
+                  // {
+                  //   $regex: new RegExp("^scribd.com", "i"),
+                  // },
                 },
               },
             }, // Filter documents
@@ -120,9 +122,10 @@ router.post("/", async (req, res) => {
               },
               topic_date: { $ne: "" },
               source_name: {
-                $ne: {
-                  $regex: new RegExp("^scribd.com", "i"),
-                },
+                $ne: "scribd.com",
+                // {
+                //   $regex: new RegExp("^scribd.com", "i"),
+                // },
               },
             },
           }, // Filter documents
@@ -159,9 +162,10 @@ router.post("/", async (req, res) => {
                 },
                 topic_date: { $ne: "" },
                 source_name: {
-                  $ne: {
-                    $regex: new RegExp("^scribd.com", "i"),
-                  },
+                  $ne: "scribd.com",
+                  // {
+                  //   $regex: new RegExp("^scribd.com", "i"),
+                  // },
                 },
               },
             }, // Filter documents
@@ -194,9 +198,10 @@ router.post("/", async (req, res) => {
               start_date: { $ne: "" },
               start_date: { $ne: "TBD" },
               source_name: {
-                $ne: {
-                  $regex: new RegExp("^scribd.com", "i"),
-                },
+                $ne: "scribd.com",
+                // {
+                //   $regex: new RegExp("^scribd.com", "i"),
+                // },
               },
             },
           }, // Filter documents
@@ -234,9 +239,10 @@ router.post("/", async (req, res) => {
                 start_date: { $ne: "" },
                 start_date: { $ne: "TBD" },
                 source_name: {
-                  $ne: {
-                    $regex: new RegExp("^scribd.com", "i"),
-                  },
+                  $ne: "scribd.com",
+                  // {
+                  //   $regex: new RegExp("^scribd.com", "i"),
+                  // },
                 },
               },
             }, // Filter documents
@@ -307,9 +313,10 @@ router.post("/count", async (req, res) => {
               },
               release_date: { $ne: "" },
               source_name: {
-                $ne: {
-                  $regex: new RegExp("^scribd.com", "i"),
-                },
+                $ne: "scribd.com",
+                // {
+                //   $regex: new RegExp("^scribd.com", "i"),
+                // },
               },
             },
           },
@@ -339,9 +346,10 @@ router.post("/count", async (req, res) => {
                 },
                 release_date: { $ne: "" },
                 source_name: {
-                  $ne: {
-                    $regex: new RegExp("^scribd.com", "i"),
-                  },
+                  $ne: "scribd.com",
+                  // {
+                  //   $regex: new RegExp("^scribd.com", "i"),
+                  // },
                 },
               },
             },
@@ -366,9 +374,10 @@ router.post("/count", async (req, res) => {
               },
               topic_date: { $ne: "" },
               source_name: {
-                $ne: {
-                  $regex: new RegExp("^scribd.com", "i"),
-                },
+                $ne: "scribd.com",
+                // {
+                //   $regex: new RegExp("^scribd.com", "i"),
+                // },
               },
             },
           },
@@ -398,9 +407,10 @@ router.post("/count", async (req, res) => {
                 },
                 release_date: { $ne: "" },
                 source_name: {
-                  $ne: {
-                    $regex: new RegExp("^scribd.com", "i"),
-                  },
+                  $ne: "scribd.com",
+                  // {
+                  //   $regex: new RegExp("^scribd.com", "i"),
+                  // },
                 },
               },
             },
@@ -426,9 +436,10 @@ router.post("/count", async (req, res) => {
               start_date: { $ne: "" },
               start_date: { $ne: "TBD" },
               source_name: {
-                $ne: {
-                  $regex: new RegExp("^scribd.com", "i"),
-                },
+                $ne: "scribd.com",
+                // {
+                //   $regex: new RegExp("^scribd.com", "i"),
+                // },
               },
             },
           },
@@ -458,9 +469,10 @@ router.post("/count", async (req, res) => {
                 },
                 release_date: { $ne: "" },
                 source_name: {
-                  $ne: {
-                    $regex: new RegExp("^scribd.com", "i"),
-                  },
+                  $ne: "scribd.com",
+                  // {
+                  //   $regex: new RegExp("^scribd.com", "i"),
+                  // },
                 },
               },
             },
