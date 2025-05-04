@@ -1,4 +1,5 @@
 const express = require("express");
+const jobs = require("../../jobsSampleData.json");
 const router = express.Router();
 const ErpCollection = require("../models/erp_collection");
 const isUrlValid = async (urlThumbnail) => {
@@ -16,6 +17,28 @@ const isUrlValid = async (urlThumbnail) => {
     return false;
   }
 };
+router.post("/jobs", async (req, res) => {
+  try {
+    const {
+      software_name,
+      domain_name,
+      page_num = 1,
+      page_size = 9,
+    } = req.body;
+    const results = jobs
+      .filter(
+        (job) =>
+          job.software_name.toLowerCase().trim() ===
+            software_name.toLowerCase().trim() &&
+          job.domain_name.toLowerCase().trim() ===
+            domain_name.toLowerCase().trim()
+      )
+      .slice((page_num - 1) * page_size, page_num * page_size);
+    return res.status(200).json(results);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 // Get all documents
 router.post("/", async (req, res) => {
   try {
