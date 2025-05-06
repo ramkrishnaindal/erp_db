@@ -17,11 +17,11 @@
     document.getElementById(id).classList.add("active");
     event.currentTarget.classList.add("active");
   }
-  const updateQueryParams=(a, b)=> {
-        var searchParams = new URLSearchParams(window.location.search);    
-        searchParams.set(a, b);
-        window.location.search = searchParams.toString();
-      }
+  // const updateQueryParams=(a, b)=> {
+  //       var searchParams = new URLSearchParams(window.location.search);    
+  //       searchParams.set(a, b);
+  //       window.location.search = searchParams.toString();
+  //     }
   // FAQ
   function toggleFAQ(item) {
     item.classList.toggle("expanded");
@@ -350,25 +350,26 @@
                       has-logo">
                       
             <td class="category" style="--category-badge-color: #231f20">
-              <a  href="javascript:updateQueryParams('id', '${_id}')">>
-              <div class="job-card">
-                <div class="company-logo">
-                  D
-                </div>
-                <div class="job-details">
-                  <div class="job-title">${job_title}</div>
-                  <div class="company-name">${company_name}</div>
-                  <div class="job-location">${job_location}</div>
-    
-                  <div class="job-meta">
-                    <div class="tag">Contract</div>
-                    <div class="tag work-mode">${employment_type}</div>
-                    ${benefitsList.join("")}
+              <a id="jobAnchor">
+                <input type="hidden" id="jobId" value="${_id}">
+                <div class="job-card">
+                  <div class="company-logo">
+                    D
                   </div>
+                  <div class="job-details">
+                    <div class="job-title">${job_title}</div>
+                    <div class="company-name">${company_name}</div>
+                    <div class="job-location">${job_location}</div>
+      
+                    <div class="job-meta">
+                      <div class="tag">Contract</div>
+                      <div class="tag work-mode">${employment_type}</div>
+                      ${benefitsList.join("")}
+                    </div>
+                  </div>
+                  <a href="${apply_url}" target="_blank"><button class="apply-btn">Quick Apply</button></a>
                 </div>
-                <a href="${apply_url}" target="_blank"><button class="apply-btn">Quick Apply</button></a>
-              </div>
-            </a>
+              </a>
               </td></tr>
             `;
       };
@@ -778,17 +779,10 @@
           if (totalRecords > results.page_size * page_num) showMore = true;
           else showMore = false;
           debugger;
-          const queryString = window.location.search;
-          const urlParams = new URLSearchParams(queryString);
-          const id = urlParams.get("id");
-          let templateString="";
-          if (id) {
-            const results = await responseJobDetailsApi({ _id: id });
-            templateString = templateJobDetails(results);
-          }else{
-            updateQueryParams("id", filtered[0]?._id);
-            return
-          }
+          
+          // updateQueryParams("id", filtered[0]?._id);
+          const results = await responseJobDetailsApi({ _id: filtered[0]?._id });
+          templateString = templateJobDetails(results);
           const resultsToDisplay = resultJobsHtml(resultTds,templateString);
           console.log(resultsToDisplay);
           //setTimeout(() => {
@@ -809,7 +803,34 @@
       (async () => {
         try {
           // social share dialog
-          document.body.addEventListener("click", function (event) {
+          document.body.addEventListener("click", function (event) {    
+            debugger;        
+            if (event.target.id == "jobAnchor" ||event.target.parentElement.id == "jobAnchor"||event.target.parentElement.parentElement.id == "jobAnchor") {
+              
+              const jobCard = event.target.id == "jobAnchor"?event.target:event.target.parentElement.id == "jobAnchor"?event.target.parentElement:event.target.parentElement.parentElement;
+              debugger;
+              const jobId = jobCard.closest(".category").querySelector(' #jobId')?.value;
+              
+              (async(jobId)=>{
+                if (jobId) {
+                  debugger;
+                  const results = await responseJobDetailsApi({ _id: jobId });
+                  const templateString = templateJobDetails(results);
+                  const resultsToDisplay = resultJobsHtml(resultTds,templateString);
+                  if (document.querySelector("li[title='Jobs']")) {
+                    const html = resultsToDisplay;
+            
+                    const elements = document.querySelectorAll(
+                      ".container.list-container div.row"
+                    );
+                    if (elements.length) {
+                      elements[elements.length - 1].innerHTML = html;
+                    }
+                  }
+                }
+              })(jobId);
+            }
+          
             if (event.target.id == "showMore") {
               (async () => {
                 const urlParams = getSubCategory();
