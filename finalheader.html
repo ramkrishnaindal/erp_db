@@ -785,6 +785,9 @@
           if (id) {
             const results = await responseJobDetailsApi({ _id: id });
             templateString = templateJobDetails(results);
+          }else{
+            updateQueryParams("id", filtered[0]?._id);
+            return
           }
           const resultsToDisplay = resultJobsHtml(resultTds,templateString);
           console.log(resultsToDisplay);
