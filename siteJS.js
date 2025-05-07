@@ -37,7 +37,7 @@ let page_num = 1;
 const responseJobsApi = async (data) => {
   try {
     const response = await fetch(
-      "https://erp-db-glqn.onrender.com/api/erp-collections/jobs",
+      "http://216.225.201.134:3000/api/erp-collections/jobs",
       {
         method: "POST", // HTTP method
         headers: {
@@ -62,7 +62,7 @@ const responseJobsApi = async (data) => {
 const responseApi = async (data) => {
   try {
     const response = await fetch(
-      "https://erp-db-glqn.onrender.com/api/erp-collections",
+      "http://216.225.201.134:3000/api/erp-collections",
       {
         method: "POST", // HTTP method
         headers: {
@@ -87,7 +87,7 @@ const responseApi = async (data) => {
 const responseApiCount = async (data) => {
   try {
     const response = await fetch(
-      "https://erp-db-glqn.onrender.com/api/erp-collections/count",
+      "http://216.225.201.134:3000/api/erp-collections/count",
       {
         method: "POST", // HTTP method
         headers: {
@@ -113,7 +113,7 @@ const responseApiCount = async (data) => {
 const responseJobsApiCount = async (data) => {
   try {
     const response = await fetch(
-      "https://erp-db-glqn.onrender.com/api/erp-collections/jobs/count",
+      "http://216.225.201.134:3000/api/erp-collections/jobs/count",
       {
         method: "POST", // HTTP method
         headers: {

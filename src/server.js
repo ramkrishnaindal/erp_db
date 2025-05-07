@@ -1,14 +1,16 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+const path = require("path");
 const erpCollectionRoutes = require("./routes/erp_collection_routes");
 const cors = require("cors"); // Import the cors package
 let interval;
 dotenv.config();
-
 const app = express();
 app.use(express.json());
 app.use(cors()); // Enable CORS for all routes
+console.log("__dirname", path.join(__dirname, "../downloads"));
+app.use("/downloads", express.static(path.join(__dirname, "../downloads")));
 let err_db;
 // MongoDB connection
 mongoose

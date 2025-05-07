@@ -1,6 +1,18 @@
 const express = require("express");
 const jobs = require("../../jobsSampleData.json");
 const router = express.Router();
+const multer = require("multer");
+const path = require("path");
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, "../../downloads")); // Save files to the downloads folder
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, uniqueSuffix + "-" + file.originalname); // Add a unique suffix to the file name
+  },
+});
+const upload = multer({ storage });
 const ErpCollection = require("../models/erp_collection");
 const isUrlValid = async (urlThumbnail) => {
   try {
@@ -38,6 +50,17 @@ router.post("/jobs", async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
+});
+router.post("/upload", upload.single("file"), (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ message: "No file uploaded" });
+  }
+
+  // Create the relative URL for the uploaded file
+  const fileUrl = `${req.protocol}://${req.get("host")}/downloads/${
+    req.file.filename
+  }`;
+  res.status(200).json({ message: "File uploaded successfully", fileUrl });
 });
 router.post("/jobs/details", async (req, res) => {
   try {
