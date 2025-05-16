@@ -651,13 +651,16 @@ nav.text-white ul li a {
   font-size: 13px;
   color: #204ecf;
 }
+tbody#custom-tbody-jobs {
+  border-top: none;
+}
 #custom-tbody-jobs .job-card {
   /* display: flex; */
   margin: 0 !important;
   background: white;
   border-radius: 10px;
   padding: 16px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); */
   align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
