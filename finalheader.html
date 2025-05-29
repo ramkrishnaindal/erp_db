@@ -76,26 +76,13 @@ function toggleHelp(item) {
   
   let resultTds;
   api.onPageChange(async () => {
-    setTimeout(()=>{
-      if(!document.querySelector(".tip-box-collapsed") && document.querySelector("li[title='Articles']") ){
-        debugger;
-        const disclaimer=`<div class="tip-box-collapsed">
-              💡 <strong>Disclaimer:</strong> Most content on this page is aggregated from publicly available sources and is shared for informational purposes only.
-              <a onclick="toggleTip(event)">
-                <span id="toggleText">Show more</span> <span id="arrow">▼</span>
-              </a>
-              <div class="tip-details" id="tipDetails" style="display: none; margin-top: 10px;">
-                All trademarks, images, and articles belong to their respective owners, and each card links directly to the original publisher. 
-                Additionally, some content may be contributed by forum users. We do not claim ownership of third-party content and are not affiliated with or endorsed by the original publishers.
-              </div>
-            </div>`
-        const el=document.createElement("div")
-        el.style.gridArea="below-content";
-        el.style.justifySelf="start";
-        el.innerHTML = disclaimer;
-        document.querySelector('#main-outlet-wrapper').appendChild(el);      
-      }
-    },10)
+    if(document.querySelector(".tip-box-collapsed")){
+      const el=document.querySelector(".tip-box-collapsed");
+      el.remove();
+    }
+    //setTimeout(()=>{
+      
+    //},1000);
     
   
     let colorCodes = [
@@ -924,6 +911,24 @@ function toggleHelp(item) {
         }
         console.log("totalRecords", totalRecords);
         //Actual logic
+        if(!document.querySelector(".tip-box-collapsed") && document.querySelector("#custom-tbody") ){
+          debugger;
+          const disclaimer=`<div class="tip-box-collapsed">
+                💡 <strong>Disclaimer:</strong> Most content on this page is aggregated from publicly available sources and is shared for informational purposes only.
+                <a onclick="toggleTip(event)">
+                  <span id="toggleText">Show more</span> <span id="arrow">▼</span>
+                </a>
+                <div class="tip-details" id="tipDetails" style="display: none; margin-top: 10px;">
+                  All trademarks, images, and articles belong to their respective owners, and each card links directly to the original publisher. 
+                  Additionally, some content may be contributed by forum users. We do not claim ownership of third-party content and are not affiliated with or endorsed by the original publishers.
+                </div>
+              </div>`
+          const el=document.createElement("div")
+          el.style.gridArea="below-content";
+          el.style.justifySelf="start";
+          el.innerHTML = disclaimer;
+          document.querySelector('#main-outlet-wrapper').appendChild(el);      
+        }
       } catch (error) {
         console.log("error", error);
       }
