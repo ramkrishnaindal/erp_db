@@ -1,10 +1,27 @@
 .above-main-container-outlet.search-banner.welcome-banner {
   overflow: visible;
-  max-height: 218px;
+  //   max-height: 218px;
+  padding: 10px;
 }
+
+.start-explore:hover {
+  text-decoration: underline;
+}
+
+.welcome-banner__wrap {
+  padding: 0;
+}
+
+.custom-search-banner {
+  margin: 0;
+}
+
 .custom-search-banner .menu-panel.search-menu-panel {
   position: relative;
   z-index: 9999;
+}
+#arrow {
+  visibility: visible;
 }
 :backdrop {
   background-image: linear-gradient(
@@ -147,7 +164,7 @@ tr[data-category-id="1034"] {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   border-bottom: 1px solid lightgray;
   padding-bottom: 6px;
 }
@@ -3106,7 +3123,25 @@ body.landing-page .btn.btn-icon {
 .header-dropdown-toggle a {
   display: block;
 }
-
+.tip-box-collapsed {
+  background: #f0f4ff;
+  padding: 10px 14px;
+  font-size: 0.95rem;
+  border-left: 4px solid #4949fc;
+  border-radius: 8px;
+  margin-top: 30px;
+}
+.tip-box-collapsed a {
+  color: #4949fc;
+  font-weight: 500;
+  font-size: 0.85rem;
+  margin-left: 6px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.tip-box-collapsed a:hover {
+  text-decoration: underline;
+}
 @media (max-width: 767px) {
   .d-header-wrap {
     position: sticky;

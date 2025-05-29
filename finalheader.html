@@ -1,4 +1,5 @@
 <meta name="robots" content="noindex, nofollow">
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 <script src="https://files.extrastatic.dev/community/on-discourse.js"></script>
 <script src="https://files.extrastatic.dev/community/index.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js" integrity="sha512-hUhvpC5f8cgc04OZb55j0KNGh4eh7dLxd/dPSJ5VyzqDWxsayYbojWyl5Tkcgrmb/RVKCRJI1jNlRbVP4WWC4w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -23,6 +24,22 @@ function showContent(id) {
 //       window.location.search = searchParams.toString();
 //     }
 // FAQ
+
+function toggleTip(event) {
+      event.preventDefault();
+      const box = document.getElementById('tipDetails');
+      const toggleText = document.getElementById('toggleText');
+      const arrow = document.getElementById('arrow');
+      if (box.style.display === 'none') {
+        box.style.display = 'block';
+        toggleText.innerText = 'Show less';
+        arrow.innerText = '▲';
+      } else {
+        box.style.display = 'none';
+        toggleText.innerText = 'Show more';
+        arrow.innerText = '▼';
+      }
+    }
 function toggleFAQ(item) {
   item.classList.toggle("expanded");
 }
@@ -38,7 +55,8 @@ function toggleHelp(item) {
   item.classList.toggle("expanded");
 }
 </script>
-<script >//type="text/discourse-plugin" version="0.8"
+<script type="text/discourse-plugin" version="0.8">//
+  
   const categories = async () => {
     const response = await fetch("/site.json");
     // Check if the response is successful
@@ -58,7 +76,28 @@ function toggleHelp(item) {
   
   let resultTds;
   api.onPageChange(async () => {
+    setTimeout(()=>{
+      if(!document.querySelector(".tip-box-collapsed") && document.querySelector("li[title='Articles']") ){
+        debugger;
+        const disclaimer=`<div class="tip-box-collapsed">
+              💡 <strong>Disclaimer:</strong> Most content on this page is aggregated from publicly available sources and is shared for informational purposes only.
+              <a onclick="toggleTip(event)">
+                <span id="toggleText">Show more</span> <span id="arrow">▼</span>
+              </a>
+              <div class="tip-details" id="tipDetails" style="display: none; margin-top: 10px;">
+                All trademarks, images, and articles belong to their respective owners, and each card links directly to the original publisher. 
+                Additionally, some content may be contributed by forum users. We do not claim ownership of third-party content and are not affiliated with or endorsed by the original publishers.
+              </div>
+            </div>`
+        const el=document.createElement("div")
+        el.style.gridArea="below-content";
+        el.style.justifySelf="start";
+        el.innerHTML = disclaimer;
+        document.querySelector('#main-outlet-wrapper').appendChild(el);      
+      }
+    },10)
     
+  
     let colorCodes = [
       { key: "conference", value: "#007bff" },
       { key: "webinar", value: "#28a745" },
@@ -79,7 +118,7 @@ function toggleHelp(item) {
     const responseJobsApi = async (data) => {
       try {
         const response = await fetch(
-          "http://216.225.201.134:3000/api/erp-collections/jobs",
+          "https://easihub.com/erp_db/api/erp-collections/jobs",
           {
             method: "POST", // HTTP method
             headers: {
@@ -104,7 +143,7 @@ function toggleHelp(item) {
     const responseJobDetailsApi = async (data) => {
         try {
           const response = await fetch(
-            "http://216.225.201.134:3000/api/erp-collections/jobs/details",
+            "https://easihub.com/erp_db/api/erp-collections/jobs/details",
             {
               method: "POST", // HTTP method
               headers: {
@@ -129,7 +168,7 @@ function toggleHelp(item) {
     const responseApi = async (data) => {
       try {
         const response = await fetch(
-          "http://216.225.201.134:3000/api/erp-collections",
+          "https://easihub.com/erp_db/api/erp-collections",
           {
             method: "POST", // HTTP method
             headers: {
@@ -154,7 +193,7 @@ function toggleHelp(item) {
     const responseApiCount = async (data) => {
       try {
         const response = await fetch(
-          "http://216.225.201.134:3000/api/erp-collections/count",
+          "https://easihub.com/erp_db/api/erp-collections/count",
           {
             method: "POST", // HTTP method
             headers: {
@@ -180,7 +219,7 @@ function toggleHelp(item) {
     const responseJobsApiCount = async (data) => {
       try {
         const response = await fetch(
-          "http://216.225.201.134:3000/api/erp-collections/jobs/count",
+          "https://easihub.com/erp_db/api/erp-collections/jobs/count",
           {
             method: "POST", // HTTP method
             headers: {
@@ -890,6 +929,97 @@ function toggleHelp(item) {
       }
     })(page_size);
   });
+  
+  api.onPageChange(() => {
+    const breadcrumbs = document.querySelector('.breadcrumbs');
+    const navContainer = document.querySelector('.navigation-container');
+
+    if (breadcrumbs && navContainer && breadcrumbs.previousElementSibling !== navContainer) {
+      navContainer.parentNode.insertBefore(breadcrumbs, navContainer);
+    }
+  });
+  
+  api.onPageChange(() => {
+    const currentUser = api.getCurrentUser();
+
+    if (currentUser) {
+      const banner = document.querySelector('.search-banner.welcome-banner');
+      if (banner) {
+        banner.style.backgroundImage = 'url("https://cdn.easihub.com/uploads/default/original/1X/607e4e3f666b0cc15318f0dde80718a978368a86.jpeg")';
+        banner.style.backgroundSize = 'cover';
+        banner.style.backgroundPosition = 'top';
+      }
+    }
+  });
+  
+  api.onPageChange(() => {
+    // Force re-trigger the breadcrumb plugin by dispatching a fake event or resetting DOM
+    const event = new Event("breadcrumbs:refresh");
+    document.dispatchEvent(event);
+  });
+      
+  api.onPageChange(() => {
+         
+      $(".category-description").each(function () {
+      const text = $(this).text();
+      const matchIndex = text.toLowerCase().indexOf("hub");
+    
+      if (matchIndex !== -1) {
+        const endIndex = matchIndex + 3; // "hub".length = 3
+        const before = text.substring(0, endIndex);
+        const after = text.substring(endIndex);
+        $(this).html(`<strong>${before}</strong>${after}`);
+      }
+    });
+     });
+
+
+// code for help tip on home page about start explore
+   api.onPageChange(() => {
+      const currentUser = api.getCurrentUser();
+      
+      const currentPath = window.location.pathname;
+    
+      if (currentUser && (currentPath === '/' || currentPath === '/categories') && !document.querySelector('.start_wrap')) {
+        const container = document.querySelector('.list-controls');
+    
+        if (container) {
+          const start_wrap = document.createElement("div");
+          start_wrap.className = "start_wrap";
+    
+          start_wrap.style.width = "100%";
+          start_wrap.style.backgroundColor = "#FFF";
+          start_wrap.style.display = 'flex';
+          start_wrap.style.justifyContent = 'center';
+          start_wrap.style.marginBottom = '10px';
+          start_wrap.style.zIndex = "999";
+          start_wrap.style.padding = '10px';
+    
+          // Add HTML
+          start_wrap.innerHTML = `
+            <span class="explore-wrap" style="font-size: 14px;">
+              Not sure where to begin? 
+              <span class="start-explore" style="color: #4949fc; cursor: pointer; pointer-event: auto; z-index: 999;">
+                  <a href="https://easihub.com/start-exploring" style = "color: #4949fc">
+                    Start Exploring
+                  </a>
+              </span> our community →
+            </span>
+          `;
+    
+          // Insert it
+          container.before(start_wrap);
+    
+          // Add click event to redirect
+        //   const exploreEl = start_wrap.querySelector(".start-explore");
+        //   if (exploreEl) {
+        //     exploreEl.addEventListener("click", () => {
+        //       window.location.href = "https://easihub.com/start-exploring";
+        //     });
+        //   }
+        }
+      }
+    });
   
   
 </script>
