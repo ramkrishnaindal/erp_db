@@ -66,7 +66,7 @@ router.post("/upload", upload.single("file"), (req, res) => {
 router.post("/jobs/details", async (req, res) => {
   try {
     const { _id } = req.body;
-    const result = jobs.find((job) => job._id === _id);
+    const result = jobs.find((job) => job._id.$oid === _id);
 
     return res.status(200).json(result);
   } catch (err) {
