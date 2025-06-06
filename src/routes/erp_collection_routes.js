@@ -1,5 +1,6 @@
 const express = require("express");
-const jobs = require("../../jobsSampleData.json");
+// const jobs = require("../../jobsSampleData.json");
+const jobs = require("../../linkedin_jobs_updated_structure.json");
 const router = express.Router();
 const multer = require("multer");
 const path = require("path");
