@@ -737,7 +737,7 @@ tbody#custom-tbody-jobs .badge {
   margin: 2px 6px 2px 0;
   border-radius: 6px;
 }
-tbody#custom-tbody-jobs .badge.meta-temp {
+.badge.meta-temp {
   background: #e0e7ff;
   color: #1e3a8a;
 }
