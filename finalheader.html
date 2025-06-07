@@ -370,7 +370,7 @@ function toggleHelp(item) {
       if(document.querySelector(".sign-up-button")){
         apply_url = `/login?redirect_to=${apply_url}`;
       }
-      const benefitsList = benefits.map((x) => {
+      const benefitsList = benefits.split(',').map((x) => {
         return `<div class="tag">${x}</div>`;
       });
       return `
@@ -380,7 +380,7 @@ function toggleHelp(item) {
                     
           <td class="category" style="--category-badge-color: #231f20">
             <a id="jobAnchor" style="cursor:pointer">
-              <input type="hidden" id="jobId" value="${_id}">
+              <input type="hidden" id="jobId" value="${_id.$oid}">
               <div class="job-card">
                 <div class="company-logo" style="cursor:pointer">
                   D
@@ -412,7 +412,8 @@ function toggleHelp(item) {
         work_location_type,
         expected_hours_per_week,
         posted_date,
-        job_functions,
+        // job_functions,
+        c_logo,
         benefits,
         qualifications,
         full_job_description,
@@ -421,16 +422,16 @@ function toggleHelp(item) {
         if(document.querySelector(".sign-up-button")){
           apply_url = `/login?redirect_to=${apply_url}`;
         }
-        const jobFunctionsList = job_functions.map((x) => {
-          return `<div class="tag">${x}</div>`;
-        });
-        const benefitsList = benefits.map((x) => {
+        // const jobFunctionsList = job_functions.map((x) => {
+        //   return `<div class="tag">${x}</div>`;
+        // });
+        const benefitsList = benefits.split(',').map((x) => {
           return `<div class="benefit">${x}</div>`;
         });
-        const qualificationsList = qualifications.map((x) => {
+        const qualificationsList = qualifications.split(',').map((x) => {
           return `<div class="tag">${x}</div>`;
         });
-        return `
+        return `       
         <div class="job-card">
     <div class="job-header">
     <div>
@@ -448,12 +449,7 @@ function toggleHelp(item) {
     <a href="${apply_url}" target="_blank" style="cursor:pointer"><button class="apply-btn">Quick Apply</button></a>
   </div>
 
-  <div class="section">
-    <h3>Job Function & Tools</h3>
-    <div class="tags">
-        ${jobFunctionsList.join("")}
-    </div>
-  </div>
+  
 
   <div class="section">
     <h3>Benefits</h3>
@@ -472,7 +468,7 @@ function toggleHelp(item) {
   <div class="section">
     <h3>Full Job Description</h3>
     <div class="description">
-        <pre>${full_job_description}</pre>        
+        ${full_job_description}      
     </div>
   </div>
   </div>
@@ -813,7 +809,7 @@ function toggleHelp(item) {
         debugger;
         
         // updateQueryParams("id", filtered[0]?._id);
-        const resultsApi = await responseJobDetailsApi({ _id: filtered[0]?._id });
+        const resultsApi = await responseJobDetailsApi({ _id: filtered[0]?._id.$oid });
         const templateString = templateJobDetails(resultsApi);
         const resultsToDisplay = resultJobsHtml(resultTds,templateString);
         console.log(resultsToDisplay);
