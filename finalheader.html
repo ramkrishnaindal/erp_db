@@ -147,6 +147,19 @@ function toggleHelp(item) {
           // Parse the JSON response
           const result = await response.json();
           console.log("Response from server:", result);
+          debugger
+          try{
+            const responseLogo = await fetch(result.c_logo);
+
+            // Check if the response is successful
+            if (!responseLogo.ok) {
+              result.c_logo=''
+            }
+          }catch(e)
+          {
+            result.c_logo=''
+          }
+          
           return result;
         } catch (error) {
           console.error("Error making POST request:", error);
@@ -404,7 +417,9 @@ function toggleHelp(item) {
     };
     const templateJobDetails = ({
         job_title,
+        job_id,
         company_name,
+        comp_desc,
         job_location,
         employment_type,
         contract_duration,
@@ -416,8 +431,11 @@ function toggleHelp(item) {
         c_logo,
         benefits,
         qualifications,
+        tech_skills,
+        required_skills,
         full_job_description,
         apply_url,
+        industry
       }) => {
         if(document.querySelector(".sign-up-button")){
           apply_url = `/login?redirect_to=${apply_url}`;
@@ -425,54 +443,83 @@ function toggleHelp(item) {
         // const jobFunctionsList = job_functions.map((x) => {
         //   return `<div class="tag">${x}</div>`;
         // });
+        
         const benefitsList = benefits.split(',').map((x) => {
-          return `<div class="benefit">${x}</div>`;
+          return `<div class="badge benefit">${x}</div>`;
+        });
+        const techSkills=tech_skills.split(',').map((x) => {
+          return `<div class="badge tech">${x}</div>`;
+        });
+        const reqSkills=required_skills.split(',').map((x) => {
+          return `<div class="badge skill">${x}</div>`;
+        });
+        const industries=industry.split(',').map((x) => {
+          return `<div class="badge industry">${x}</div>`;
         });
         const qualificationsList = qualifications.split(',').map((x) => {
           return `<div class="tag">${x}</div>`;
         });
         return `       
-        <div class="job-card">
-    <div class="job-header">
-    <div>
-      <div class="job-title">${job_title}</div>
-      <div class="company">${company_name}</div>
-      <div class="location">${job_location}</div>
-      <div class="highlights">
-        <div class="highlight">🕒 ${employment_type} · ${contract_duration}</div>
-        <div class="highlight">${salary_range}</div>
-        <div class="highlight">🏢 ${work_location_type}</div>
-        <div class="highlight">🕘 ${expected_hours_per_week} hrs/week</div>
-        <div class="highlight">📅 Posted ${posted_date}</div>
+        <div class="job-detail">
+    <div class="scrollable-content">
+      <div class="meta-top">
+        <div class="meta-left">
+          <h2>${job_title}</h2>
+          <div class="company">${company_name}</div>
+          <div class="location">${location}</div>
+        </div>
+        ${c_logo?`<div class="logo"><img src="${c_logo}" alt="Logo"></div>`:''}
       </div>
-    </div>
-    <a href="${apply_url}" target="_blank" style="cursor:pointer"><button class="apply-btn">Quick Apply</button></a>
-  </div>
 
-  
+      <div class="badges">
+        <span class="badge meta">Job ID: ${job_id}</span>
+        <span class="badge meta">${employment_type}</span>
+        <span class="badge meta">${work_location_type}</span>
+        <span class="badge meta">${salary_range}</span>
+        <span class="badge meta">${benefitsList.join("")}</span>
+        <span class="badge meta">${posted_date}</span>
+      </div>
 
-  <div class="section">
-    <h3>Benefits</h3>
-    <div class="benefits">
-      ${benefitsList.join("")}
-    </div>
-  </div>
+      <div class="anchor-links">
+        <a href="#description">Description</a>
+        <a href="#qualifications">Qualifications</a>
+        <a href="#skills">Skills</a>
+        <a href="#benefits">Benefits</a>
+      </div>
 
-  <div class="section">
-    <h3>Qualifications</h3>
-    <div class="tags">
-      ${qualificationsList.join("")}
-    </div>
-  </div>
+      <div id="description">
+        <div class="section-title">Company Description</div>
+        <div class="section-content">${comp_desc}</div>
 
-  <div class="section">
-    <h3>Full Job Description</h3>
-    <div class="description">
-        ${full_job_description}      
+        <div class="section-title">Full Job Description</div>
+        <div class="job_description"><pre>${full_job_description}</pre></div>
+      </div>
+
+      <div id="qualifications">
+        <div class="section-title">Qualifications</div>
+        <div class="section-content">${qualificationsList.join('')}</div>
+      </div>
+
+      <div id="skills">
+        <div class="section-title">Required Skills</div>
+        <div class="section-content">${reqSkills.join('')}</div>
+
+        <div class="section-title">Tech Stack / Tools</div>
+        <div class="section-content">${techSkills.join('')}</div>
+      </div>
+
+      <div id="benefits">
+        <div class="section-title">Benefits</div>
+        <div class="section-content">${benefitsList.join('')}</div>
+      </div>
+
+      <div class="section-title">Industry</div>
+      <div class="section-content">${industries.join('')}</div>
     </div>
-  </div>
-  </div>
-    `;
+
+    <div class="apply-footer">
+      <a class="apply-button" href="${apply_url}" target="_blank">Apply</a>
+    </div>`
       };
     const templateArticle = ({
       title = "Article Title",
