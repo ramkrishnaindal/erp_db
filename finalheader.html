@@ -379,12 +379,27 @@ function toggleHelp(item) {
       employment_type,
       benefits,
       apply_url,
+      work_location_type,
+      seniority_level,
+      required_skills,
+      tech_skills,
+      industry,
+      c_logo,
+      posted_date,
+    apply_button_label,
+      
     }) => {
       if(document.querySelector(".sign-up-button")){
         apply_url = `/login?redirect_to=${apply_url}`;
       }
-      const benefitsList = benefits.split(',').map((x) => {
-        return `<div class="tag">${x}</div>`;
+      const requiredSkills = required_skills.split(',').splice(0,3).map((x) => {
+        return `<div class="badge skill">${x}</div>`;
+      });
+      const techSkills = tech_skills.split(',').splice(0,3).map((x) => {
+        return `<div class="badge tech">${x}</div>`;
+      });
+      const industries = industry.split(',').splice(0,3).map((x) => {
+        return `<div class="badge industry">${x}</div>`;
       });
       return `
 
@@ -395,21 +410,33 @@ function toggleHelp(item) {
             <a id="jobAnchor" style="cursor:pointer">
               <input type="hidden" id="jobId" value="${_id.$oid}">
               <div class="job-card">
-                <div class="company-logo" style="cursor:pointer">
-                  D
+                <div class="job-header">
+                  <div class="meta">
+                    <h3>${job_title}</h3>
+                    <span>${company_name}</span>
+                    <span>${job_location}</span>
+                  </div>
+                  <div class="logo">${job_title.substr(0,1).toUpperCase()}</div>
                 </div>
-                <div class="job-details" style="cursor:pointer">
-                  <div class="job-title" style="cursor:pointer">${job_title}</div>
-                  <div class="company-name" style="cursor:pointer">${company_name}</div>
-                  <div class="job-location" style="cursor:pointer">${job_location}</div>
-    
-                  <div class="job-meta" style="cursor:pointer">
-                    <div class="tag">Contract</div>
-                    <div class="tag work-mode">${employment_type}</div>
-                    ${benefitsList.join("")}
+
+                <div class="badges">
+                  <span class="badge meta-temp">${employment_type}</span>
+                  <span class="badge meta-temp">${work_location_type}</span>
+                  <span class="badge meta-temp">${seniority_level}</span>
+                  ${requiredSkills.join('')}
+                  ${techSkills.join('')}
+                  ${industries.join('')}                  
+                </div>
+
+                <div class="footer">
+                  <span class="posted-date">${posted_date}</span>
+                  <div class="apply-share-group">
+                    <a class="apply-button" href="#">${apply_button_label}</a>
+                    <button class="share-button" title="Share this job">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7a2.5 2.5 0 0 0 0-1.39l7.05-4.11a2.5 2.5 0 1 0-.91-1.65L8 9.66a2.5 2.5 0 1 0 0 4.68l7.14 4.08c.05.03.1.06.16.09a2.5 2.5 0 1 0 2.7-2.43z"/></svg>
+                    </button>
                   </div>
                 </div>
-                <a href="${apply_url}" target="_blank" style="cursor:pointer"><button class="apply-btn">Quick Apply</button></a>
               </div>
             </a>
             </td></tr>
@@ -434,6 +461,7 @@ function toggleHelp(item) {
         tech_skills,
         required_skills,
         full_job_description,
+        apply_button_label,
         apply_url,
         industry
       }) => {
@@ -466,7 +494,7 @@ function toggleHelp(item) {
         <div class="meta-left">
           <h2>${job_title}</h2>
           <div class="company">${company_name}</div>
-          <div class="location">${location}</div>
+          <div class="location">${job_location}</div>
         </div>
         ${c_logo?`<div class="logo"><img src="${c_logo}" alt="Logo"></div>`:''}
       </div>
@@ -518,7 +546,7 @@ function toggleHelp(item) {
     </div>
 
     <div class="apply-footer">
-      <a class="apply-button" href="${apply_url}" target="_blank">Apply</a>
+      <a class="apply-button" href="${apply_url}" target="_blank">${apply_button_label}</a>
     </div>`
       };
     const templateArticle = ({

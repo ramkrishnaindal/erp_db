@@ -674,6 +674,127 @@ nav.text-white ul li a {
 tbody#custom-tbody-jobs {
   border-top: none;
 }
+tbody#custom-tbody-jobs .job-card {
+  /* width: 380px; */
+  background-color: white;
+  border-radius: 10px;
+  /* box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); */
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+tbody#custom-tbody-jobs .job-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+tbody#custom-tbody-jobs .job-header .meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+tbody#custom-tbody-jobs .job-header .meta h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+}
+tbody#custom-tbody-jobs .meta {
+  --meta-element-margin: 0.375em;
+  position: relative;
+  bottom: auto;
+  width: 100%;
+  color: var(--secondary);
+  background: inherit;
+  opacity: 1;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+}
+tbody#custom-tbody-jobs .job-header .meta span {
+  font-size: 14px;
+  color: #6b7280;
+}
+tbody#custom-tbody-jobs .logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+  background-color: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #374151;
+}
+tbody#custom-tbody-jobs .badges {
+  margin: 10px 0;
+}
+tbody#custom-tbody-jobs .badge {
+  display: inline-block;
+  font-size: 12px;
+  padding: 4px 8px;
+  margin: 2px 6px 2px 0;
+  border-radius: 6px;
+}
+tbody#custom-tbody-jobs .badge.meta-temp {
+  background: #e0e7ff;
+  color: #1e3a8a;
+}
+tbody#custom-tbody-jobs .badge.skill {
+  background: #ecfdf5;
+  color: #065f46;
+}
+tbody#custom-tbody-jobs .badge.tech {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+tbody#custom-tbody-jobs .badge.benefit {
+  background: #fef9c3;
+  color: #92400e;
+}
+tbody#custom-tbody-jobs .badge.industry {
+  background: #f3e8ff;
+  color: #7e22ce;
+}
+tbody#custom-tbody-jobs .footer {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+  background-color: inherit !important;
+}
+tbody#custom-tbody-jobs .posted-date {
+  font-size: 12px;
+  color: #6b7280;
+}
+tbody#custom-tbody-jobs .apply-share-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+tbody#custom-tbody-jobs .apply-button {
+  padding: 8px 14px;
+  background-color: #1d4ed8;
+  color: white;
+  border-radius: 6px;
+  font-size: 13px;
+  text-decoration: none;
+}
+tbody#custom-tbody-jobs .apply-button:hover {
+  background-color: #2563eb;
+}
+tbody#custom-tbody-jobs .share-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+tbody#custom-tbody-jobs .share-button svg {
+  fill: #4949fc;
+  width: 20px;
+  height: 20px;
+}
 .job-card-details .job-detail {
   background-color: white;
   width: 400px;
