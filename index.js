@@ -21,7 +21,7 @@ let categoriesList = [];
   const responseApi = async (data) => {
     try {
       const response = await fetch(
-        "http://216.225.201.134:3000/api/erp-collections",
+        "https://easihub.com/erp_db/api/erp-collections",
         {
           method: "POST", // HTTP method
           headers: {

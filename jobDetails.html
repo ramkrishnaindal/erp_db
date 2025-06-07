@@ -185,7 +185,7 @@
       const responseApi = async (data) => {
         try {
           const response = await fetch(
-            "http://216.225.201.134:3000/api/erp-collections/jobs/details",
+            "https://easihub.com/erp_db/api/erp-collections/jobs/details",
             {
               method: "POST", // HTTP method
               headers: {
@@ -213,6 +213,12 @@
         const id = urlParams.get("id");
         if (id) {
           const results = await responseApi({ _id: id });
+          results.benefits = Array.isArray(results.benefits)
+            ? results.benefits
+            : results.benefits.split(",") || [];
+          results.qualifications = Array.isArray(results.qualifications)
+            ? results.qualifications
+            : results.qualifications.split(",") || [];
           const templateString = template(results);
           document.querySelector(".job-card").innerHTML = templateString;
         }
