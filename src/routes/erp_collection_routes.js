@@ -1,6 +1,6 @@
 const express = require("express");
+
 // const jobs = require("../../jobsSampleData.json");
-const jobs = require("../../linkedin_jobs_updated_structure.json");
 const router = express.Router();
 const multer = require("multer");
 const path = require("path");
@@ -15,6 +15,7 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 const ErpCollection = require("../models/erp_collection");
+const JobDetail = require("../models/jobDetails"); // <-- Add this line
 const isUrlValid = async (urlThumbnail) => {
   try {
     // Check if the URL is valid
@@ -38,16 +39,41 @@ router.post("/jobs", async (req, res) => {
       page_num = 1,
       page_size = 9,
     } = req.body;
-    const results = jobs
-      .filter(
-        (job) =>
-          job.software_name.toLowerCase().trim() ===
-            software_name.toLowerCase().trim() &&
-          job.domain_name.toLowerCase().trim() ===
-            domain_name.toLowerCase().trim()
-      )
-      .slice((page_num - 1) * page_size, page_num * page_size);
+
+    const filter = {
+      software_name: { $regex: new RegExp("^" + software_name.trim(), "i") },
+      domain_name: { $regex: new RegExp("^" + domain_name.trim(), "i") },
+    };
+
+    const results = await JobDetail.find(filter)
+      .skip((page_num - 1) * page_size)
+      .limit(page_size);
+
     return res.status(200).json(results);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+router.post("/jobs/details", async (req, res) => {
+  try {
+    const { _id } = req.body;
+    const result = await JobDetail.findById(_id);
+    return res.status(200).json(result);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+router.post("/jobs/count", async (req, res) => {
+  try {
+    const { software_name, domain_name } = req.body;
+    const filter = {
+      software_name: { $regex: new RegExp("^" + software_name.trim(), "i") },
+      domain_name: { $regex: new RegExp("^" + domain_name.trim(), "i") },
+    };
+    const count = await JobDetail.countDocuments(filter);
+    return res.status(200).json(count);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
@@ -63,32 +89,7 @@ router.post("/upload", upload.single("file"), (req, res) => {
   }`;
   res.status(200).json({ message: "File uploaded successfully", fileUrl });
 });
-router.post("/jobs/details", async (req, res) => {
-  try {
-    const { _id } = req.body;
-    const result = jobs.find((job) => job._id.$oid === _id);
 
-    return res.status(200).json(result);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
-router.post("/jobs/count", async (req, res) => {
-  try {
-    const { software_name, domain_name } = req.body;
-    const results = jobs.filter(
-      (job) =>
-        job.software_name.toLowerCase().trim() ===
-          software_name.toLowerCase().trim() &&
-        job.domain_name.toLowerCase().trim() ===
-          domain_name.toLowerCase().trim()
-    ).length;
-
-    return res.status(200).json(results);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
 // Get all documents
 router.post("/", async (req, res) => {
   try {

@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+const {connErpdb} = require("./dbConnections");
 const ErpCollection = new mongoose.Schema(
   {
     title: {
@@ -94,5 +95,5 @@ const ErpCollection = new mongoose.Schema(
   },
   { collection: "erp_collection" }
 );
+module.exports =  connErpdb.model('erp_collection', ErpCollection); // collection name is jobdetails
 
-module.exports = mongoose.model("erp_collection", ErpCollection);
