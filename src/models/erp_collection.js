@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const {connErpdb} = require("./dbConnections");
+const {connErpdb} = require("../dbConnections");
 const ErpCollection = new mongoose.Schema(
   {
     title: {
