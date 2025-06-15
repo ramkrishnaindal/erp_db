@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const {connJobsdb} = require("./dbConnections");
+const {connJobsdb} = require("../dbConnections");
 const jobSchema = new mongoose.Schema({
   job_title: String,
   company_name: String,

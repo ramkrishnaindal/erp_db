@@ -1,70 +1,62 @@
 const mongoose = require("mongoose");
 let interval;
 let err_db = null;
-let connErpdb,connJobsdb; 
-
-mongoose.createConnection(process.env.MONGO_URI)
-  .then((connection) => {
-    connErpdb = connection;
-    console.log("Connected to MongoDB");
-    if (interval) clearInterval(interval);
-    err_db = null;
-  })
-  .catch((err) => {
-    console.error("MongoDB connection error:", err);
-    err_db = err;
-    if (err_db) {
-      if (interval) {
-        clearInterval(interval);
-      } else {
-        interval = setInterval(() => {
-          mongoose.createConnection(process.env.MONGO_URI)
-            .then((connection) => {
-              connErpdb = connection;
-              console.log("Connected to MongoDB");
-              if (interval) clearInterval(interval);
-              err_db = null;
-            })
-            .catch((err) => {
-              console.error("MongoDB connection error:", err);
-              err_db = err;
-            });
-        }, 10000);
-      }
+let connErpdb;
+let connJobsdb;
+const dotenv = require("dotenv");
+dotenv.config();
+try {
+  connJobsdb = mongoose.createConnection(process.env.MONGO_URI)
+} catch (error) {
+  console.error("MongoDB connection error:", error);
+  err_db = err;
+  if (err_db) {
+    if (interval) {
+      clearInterval(interval);
     } else {
-      if (interval) clearInterval(interval);
+      interval = setInterval(() => {
+        try {
+          connJobsdb = mongoose.createConnection(process.env.MONGO_URI)
+          console.log("Connected to MongoDB");
+          if (interval) clearInterval(interval);
+          err_db = null;
+        } catch (error) {
+          console.error("MongoDB connection error:", err);
+          err_db = err;
+        }
+      }, 10000);
     }
-  });
-mongoose.createConnection(process.env.MONGO_JOBS_URI)
-  .then((connection) => {
-    connJobsdb = connection;
-    console.log("Connected to MongoDB");
+  } else {
     if (interval) clearInterval(interval);
-    err_db = null;
-  })
-  .catch((err) => {
-    console.error("MongoDB connection error:", err);
-    err_db = err;
-    if (err_db) {
-      if (interval) {
-        clearInterval(interval);
-      } else {
-        interval = setInterval(() => {
-          mongoose.createConnection(process.env.MONGO_JOBS_URI)
-            .then((connection) => {
-              connJobsdb = connection;
-              console.log("Connected to MongoDB");
-              if (interval) clearInterval(interval);
-              err_db = null;
-            })
-            .catch((err) => {
-              console.error("MongoDB connection error:", err);
-              err_db = err;
-            });
-        }, 10000);
-      }
+  }
+}
+try {
+  connJobsdb = mongoose.createConnection(process.env.MONGO_JOBS_URI)
+} catch (error) {
+  console.error("MongoDB connection error:", error);
+  err_db = err;
+  if (err_db) {
+    if (interval) {
+      clearInterval(interval);
     } else {
-      if (interval) clearInterval(interval);
+      interval = setInterval(() => {
+        try {
+          connJobsdb = mongoose.createConnection(process.env.MONGO_JOBS_URI)
+          console.log("Connected to MongoDB");
+          if (interval) clearInterval(interval);
+          err_db = null;
+        } catch (error) {
+          console.error("MongoDB connection error:", err);
+          err_db = err;
+        }
+      }, 10000);
     }
-  });
-module.exports = { connErpdb, connJobsdb,err_db };
+  } else {
+    if (interval) clearInterval(interval);
+  }
+}
+module.exports = {
+  connErpdb, 
+  connJobsdb,
+  err_db
+};
