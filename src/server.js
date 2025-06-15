@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(cors()); // Enable CORS for all routes
 console.log("__dirname", path.join(__dirname, "../downloads"));
 app.use("/downloads", express.static(path.join(__dirname, "../downloads")));
-let err_db;
+
 // MongoDB connection
 
 
