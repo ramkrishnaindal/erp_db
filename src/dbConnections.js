@@ -6,7 +6,7 @@ let connJobsdb;
 const dotenv = require("dotenv");
 dotenv.config();
 try {
-  connJobsdb = mongoose.createConnection(process.env.MONGO_URI)
+  connErpdb = mongoose.createConnection(process.env.MONGO_URI)
 } catch (error) {
   console.error("MongoDB connection error:", error);
   err_db = err;
@@ -16,7 +16,7 @@ try {
     } else {
       interval = setInterval(() => {
         try {
-          connJobsdb = mongoose.createConnection(process.env.MONGO_URI)
+          connErpdb = mongoose.createConnection(process.env.MONGO_URI)
           console.log("Connected to MongoDB");
           if (interval) clearInterval(interval);
           err_db = null;

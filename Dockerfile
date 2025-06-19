@@ -12,7 +12,6 @@ RUN npm install
 
 # Copy the rest of the application code to the working directory
 COPY . .
-ENV MONGO_URI=mongodb://216.225.201.134:27017/erp_db?directConnection=true&tls=false
 # Expose the port your application runs on
 EXPOSE 3000
 
