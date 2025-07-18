@@ -147,7 +147,6 @@ function toggleHelp(item) {
           // Parse the JSON response
           const result = await response.json();
           console.log("Response from server:", result);
-          debugger
           try{
             const responseLogo = await fetch(result.c_logo);
 
@@ -265,8 +264,6 @@ function toggleHelp(item) {
       if (findColor) {
         return findColor.value;
       } else {
-        debugger;
-  
         const rgb = hexToRgb(colorCodes[colorCodes.length - 1].value); // default blue
         rgb.r = (rgb.r + 40) % 255;
         rgb.g = (rgb.g + 120) % 255;
@@ -408,7 +405,7 @@ function toggleHelp(item) {
                     
           <td class="category" style="--category-badge-color: #231f20">
             <a id="jobAnchor" style="cursor:pointer">
-              <input type="hidden" id="jobId" value="${_id.$oid}">
+              <input type="hidden" id="jobId" value="${_id}">
               <div class="job-card">
                 <div class="job-header">
                   <div class="meta">
@@ -812,7 +809,7 @@ function toggleHelp(item) {
                 <div class="category-description" style="margin-bottom:0;font-weight:700"> ${source_name}</div>   
                 <div class="category-description" style="margin-bottom:0">|</div>   
                 ${
-                  author_name.length
+                  author_name?.length
                     ? `<div class="category-description" style="margin-bottom:0;width: 100px;text-overflow: ellipsis;overflow: hidden;white-space: nowrap;"> ${author_name}</div>`
                     : ""
                 }   
@@ -848,7 +845,7 @@ function toggleHelp(item) {
         if (totalRecords > results.page_size * page_num) showMore = true;
         else showMore = false;
         const resultsToDisplay = resultHtml(resultTds);
-        console.log(resultsToDisplay);
+        // console.log(resultsToDisplay);
         //setTimeout(() => {
   
         // alert(document.querySelector("li[title='Articles']"));
@@ -880,10 +877,9 @@ function toggleHelp(item) {
         
         if (totalRecords > results.page_size * page_num) showMore = true;
         else showMore = false;
-        debugger;
         
         // updateQueryParams("id", filtered[0]?._id);
-        const resultsApi = await responseJobDetailsApi({ _id: filtered[0]?._id.$oid });
+        const resultsApi = await responseJobDetailsApi({ _id: filtered[0]?._id });
         const templateString = templateJobDetails(resultsApi);
         const resultsToDisplay = resultJobsHtml(resultTds,templateString);
         console.log(resultsToDisplay);
@@ -906,16 +902,13 @@ function toggleHelp(item) {
       try {
         // social share dialog
         document.body.addEventListener("click", function (event) {    
-          debugger;        
           if (event.target.id == "jobAnchor" ||event.target.parentElement.id == "jobAnchor"||event.target.parentElement.parentElement.id == "jobAnchor") {
             
             const jobCard = event.target.id == "jobAnchor"?event.target:event.target.parentElement.id == "jobAnchor"?event.target.parentElement:event.target.parentElement.parentElement;
-            debugger;
             const jobId = jobCard.closest(".category").querySelector(' #jobId')?.value;
             
             (async(jobId)=>{
               if (jobId) {
-                debugger;
                 const results = await responseJobDetailsApi({ _id: jobId });
                 const templateString = templateJobDetails(results);
                 const resultsToDisplay = resultJobsHtml(resultTds,templateString);
@@ -936,7 +929,6 @@ function toggleHelp(item) {
           if (event.target.id == "showMore") {
             (async () => {
               const urlParams = getSubCategory();
-              // debugger
               const results = await getCategoryName(urlParams);
               if (!results.software_name) {
                 results.software_name = results.domain_name;
@@ -954,6 +946,32 @@ function toggleHelp(item) {
           }
         });
         // //clear the previous results
+        // if (document.querySelector("li[title='Articles']")) {
+        //   const elements = document.querySelectorAll(
+        //     ".container.list-container div.row"
+        //   );
+        //   if (elements.length) {
+        //     elements[elements.length - 1].innerHTML = "";
+        //   }
+        // }
+        if (categoriesList.length === 0) {
+          // Fetch categories only once
+          categoriesList = (await categories()).categories;
+        }
+        const urlParams = getSubCategory();
+        const results = await getCategoryName(urlParams);
+        if (!results.software_name) {
+          results.software_name = results.domain_name;
+        }
+        
+        const customTypes = ['jobs', 'events', 'articles', 'bulletins'];
+        if (!customTypes.includes(results.topic_type)) {
+          // Not a custom topic type, do nothing!
+          // Let Discourse handle default rendering and pagination
+          return;
+        }
+    
+        // Clear previous results ONLY for custom types
         if (document.querySelector("li[title='Articles']")) {
           const elements = document.querySelectorAll(
             ".container.list-container div.row"
@@ -962,43 +980,32 @@ function toggleHelp(item) {
             elements[elements.length - 1].innerHTML = "";
           }
         }
-        if (categoriesList.length === 0) {
-          // Fetch categories only once
-          categoriesList = (await categories()).categories;
-        }
-        const urlParams = getSubCategory();
-        debugger;
-        const results = await getCategoryName(urlParams);
-        if (!results.software_name) {
-          results.software_name = results.domain_name;
-        }
-        if (results.topic_type === "jobs") {
-          totalRecords = await responseJobsApiCount(results);
-          await displayJobResults(results, page_size);
-        } else {
-          totalRecords = await responseApiCount(results);
-          await displayResults(results, page_size);
-        }
-        console.log("totalRecords", totalRecords);
-        //Actual logic
-        if(!document.querySelector(".tip-box-collapsed") && document.querySelector("#custom-tbody") ){
-          debugger;
-          const disclaimer=`<div class="tip-box-collapsed">
-                💡 <strong>Disclaimer:</strong> Most content on this page is aggregated from publicly available sources and is shared for informational purposes only.
-                <a onclick="toggleTip(event)">
-                  <span id="toggleText">Show more</span> <span id="arrow">▼</span>
-                </a>
-                <div class="tip-details" id="tipDetails" style="display: none; margin-top: 10px;">
-                  All trademarks, images, and articles belong to their respective owners, and each card links directly to the original publisher. 
-                  Additionally, some content may be contributed by forum users. We do not claim ownership of third-party content and are not affiliated with or endorsed by the original publishers.
-                </div>
-              </div>`
-          const el=document.createElement("div")
-          el.style.gridArea="below-content";
-          el.style.justifySelf="start";
-          el.innerHTML = disclaimer;
-          document.querySelector('#main-outlet-wrapper').appendChild(el);      
-        }
+            if (results.topic_type === "jobs") {
+              totalRecords = await responseJobsApiCount(results);
+              await displayJobResults(results, page_size);
+            } else {
+              totalRecords = await responseApiCount(results);
+              await displayResults(results, page_size);
+            }
+            // console.log("totalRecords", totalRecords);
+            //Actual logic
+            if(!document.querySelector(".tip-box-collapsed") && document.querySelector("#custom-tbody") ){
+              const disclaimer=`<div class="tip-box-collapsed">
+                    💡 <strong>Disclaimer:</strong> Most content on this page is aggregated from publicly available sources and is shared for informational purposes only.
+                    <a onclick="toggleTip(event)">
+                      <span id="toggleText">Show more</span> <span id="arrow">▼</span>
+                    </a>
+                    <div class="tip-details" id="tipDetails" style="display: none; margin-top: 10px;">
+                      All trademarks, images, and articles belong to their respective owners, and each card links directly to the original publisher. 
+                      Additionally, some content may be contributed by forum users. We do not claim ownership of third-party content and are not affiliated with or endorsed by the original publishers.
+                    </div>
+                  </div>`
+              const el=document.createElement("div")
+              el.style.gridArea="below-content";
+              el.style.justifySelf="start";
+              el.innerHTML = disclaimer;
+              document.querySelector('#main-outlet-wrapper').appendChild(el);      
+            }
       } catch (error) {
         console.log("error", error);
       }
