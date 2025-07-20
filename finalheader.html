@@ -44,6 +44,7 @@ function toggleFAQ(item) {
   item.classList.toggle("expanded");
 }
 function getMomentDate(date) {
+  if(date.includes('<a')) return date;
   const converted= moment(date).format("LL");
   if (converted === "Invalid date") {
     return date;
@@ -287,6 +288,9 @@ function toggleHelp(item) {
       url,
       thumbnail_url,
     }) => {
+      author_name=author_name==null?'':author_name
+      start_date=start_date==null?`<a target="_blank" href="${url}">View Details</a>`:start_date;
+      end_date=end_date==null?`<a target="_blank" href="${url}">View Details</a>`:end_date;
       return `
           <tr data-category-id="69" data-notification-level="regular" class="has-description          
                     has-logo">
@@ -386,6 +390,7 @@ function toggleHelp(item) {
     apply_button_label,
       
     }) => {
+      posted_date=posted_date==null?`<a target="_blank" href="${url}">View Details</a>`:posted_date;
       if(document.querySelector(".sign-up-button")){
         apply_url = `/login?redirect_to=${apply_url}`;
       }
@@ -551,11 +556,15 @@ function toggleHelp(item) {
       domain_name,
       source_name,
       description = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo iure autem reiciendis tenetur. Eaque placeat adipisci officiis facere commodi non corporis veniam repellat nesciunt, quasi neque dolore labore voluptatibus laborum.",
-      author_name = "John Doe",
-      topic_date = "2023-10-01",
-      url = "https://easihub.com/tags/c/plm-product-lifecycle-management/generic-plm-topics/1581/articles",
+      author_name ,
+      topic_date ,
+      url ,
       thumbnail_url,
     }) => {
+
+      author_name=author_name==null||author_name?.trim()=="null"?'':author_name
+      topic_date=topic_date==null?`<a target="_blank" href="${url}" style="width: 100%;margin-top:10px;color: rgb(0,220,220);">View Details</a>`:topic_date
+      
       return `
         <tr data-category-id="69" data-notification-level="regular" class="has-description          
                   has-logo">
@@ -729,12 +738,18 @@ function toggleHelp(item) {
       domain_name,
       source_name,
       description = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo iure autem reiciendis tenetur. Eaque placeat adipisci officiis facere commodi non corporis veniam repellat nesciunt, quasi neque dolore labore voluptatibus laborum.",
-      author_name = "John Doe",
-      release_date = "2023-10-01",
+      author_name,
+      release_date,
       topic_date,
       url = "https://easihub.com/tags/c/plm-product-lifecycle-management/generic-plm-topics/1581/articles",
       thumbnail_url,
     }) => {
+      author_name=author_name==null?'':author_name
+      version_name=version_name==null?'':version_name
+      release_date=release_date==null?`<a target="_blank" href="${url}">View Details</a>`:release_date;
+      topic_date=topic_date==null?`<a target="_blank" href="${url}">View Details</a>`:topic_date;
+      
+      
       return `
           <tr data-category-id="69" data-notification-level="regular" class="has-description          
                     has-logo">

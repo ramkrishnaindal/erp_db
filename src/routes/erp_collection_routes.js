@@ -24,7 +24,10 @@ const isUrlValid = async (urlThumbnail) => {
     if (!response.ok) {
       return false;
     }
-    return true;
+    if (response.ok) {
+      const contentType = response.headers.get('Content-Type');
+      return contentType && contentType.startsWith('image/');
+    }
   } catch (err) {
     console.error("Error fetching URL:", err);
     // If the URL is not valid, return false
