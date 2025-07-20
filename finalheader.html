@@ -745,9 +745,9 @@ function toggleHelp(item) {
       thumbnail_url,
     }) => {
       author_name=author_name==null?'':author_name
+      topic_date=topic_date==null?'':topic_date
       version_name=version_name==null?'':version_name
       release_date=release_date==null?`<a target="_blank" href="${url}">View Details</a>`:release_date;
-      topic_date=topic_date==null?`<a target="_blank" href="${url}">View Details</a>`:topic_date;
       
       
       return `
